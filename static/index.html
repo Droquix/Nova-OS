@@ -124,8 +124,9 @@
             <div class="dashboard-grid">
                 <!-- Goals -->
                 <div class="card glass grid-item goals-card">
-                    <div class="card-header">
-                        <h2><i class="fa-solid fa-bullseye card-icon icon-goal"></i> Current Goals</h2>
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <h2 style="margin: 0;"><i class="fa-solid fa-bullseye card-icon icon-goal"></i> Current Goals</h2>
+                        <span id="goals-count" class="badge-count" style="font-size: 11px; padding: 2px 6px; border-radius: 10px; background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); font-weight: 700;">0</span>
                     </div>
                     <div class="card-body scrollable" id="goals-list">
                         <!-- Goals dynamic insertion -->
@@ -134,8 +135,9 @@
 
                 <!-- Today's Tasks -->
                 <div class="card glass grid-item tasks-card">
-                    <div class="card-header">
-                        <h2><i class="fa-solid fa-list-check card-icon icon-task"></i> Today's Tasks</h2>
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <h2 style="margin: 0;"><i class="fa-solid fa-list-check card-icon icon-task"></i> Today's Tasks</h2>
+                        <span id="tasks-count" class="badge-count" style="font-size: 11px; padding: 2px 6px; border-radius: 10px; background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); font-weight: 700;">0</span>
                     </div>
                     <div class="card-body scrollable" id="tasks-list">
                         <!-- Tasks dynamic insertion -->
@@ -144,8 +146,9 @@
 
                 <!-- Milestones -->
                 <div class="card glass grid-item milestones-card">
-                    <div class="card-header">
-                        <h2><i class="fa-solid fa-flag-checkered card-icon icon-milestone"></i> Upcoming Milestones</h2>
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <h2 style="margin: 0;"><i class="fa-solid fa-flag-checkered card-icon icon-milestone"></i> Upcoming Milestones</h2>
+                        <span id="milestones-count" class="badge-count" style="font-size: 11px; padding: 2px 6px; border-radius: 10px; background: rgba(34, 197, 94, 0.15); color: var(--accent-green); font-weight: 700;">0</span>
                     </div>
                     <div class="card-body scrollable" id="milestones-list">
                         <!-- Milestones dynamic insertion -->
@@ -154,8 +157,9 @@
 
                 <!-- Reflections -->
                 <div class="card glass grid-item reflections-card">
-                    <div class="card-header">
-                        <h2><i class="fa-solid fa-brain card-icon icon-reflection"></i> Recent Reflections</h2>
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <h2 style="margin: 0;"><i class="fa-solid fa-brain card-icon icon-reflection"></i> Recent Reflections</h2>
+                        <span id="reflections-count" class="badge-count" style="font-size: 11px; padding: 2px 6px; border-radius: 10px; background: rgba(244, 114, 182, 0.15); color: #f472b6; font-weight: 700;">0</span>
                     </div>
                     <div class="card-body scrollable" id="reflections-list">
                         <!-- Reflections dynamic insertion -->
@@ -178,6 +182,12 @@
                 <div class="chat-input-area">
                     <input type="text" id="query-input" placeholder="Type a command (e.g., 'Plan a goal to run 5k in 2 months' or 'Log reflection for today')..." onkeydown="if(event.key === 'Enter') sendQuery()">
                     <button class="send-btn" onclick="sendQuery()"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+                <div class="terminal-suggestions" style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; padding: 0 4px;">
+                    <span class="suggestion-chip" onclick="prefillQuery('Plan a goal to run 5k in 2 months')"><i class="fa-solid fa-wand-magic-sparkles"></i> Plan Goal</span>
+                    <span class="suggestion-chip" onclick="prefillQuery('Plan daily tasks for my goals')"><i class="fa-solid fa-list-check"></i> Generate Tasks</span>
+                    <span class="suggestion-chip" onclick="prefillQuery('Decompose my active goals into milestones')"><i class="fa-solid fa-map"></i> Generate Milestones</span>
+                    <span class="suggestion-chip" onclick="prefillQuery('Analyze my progress and log reflections')"><i class="fa-solid fa-clipboard-question"></i> Daily Reflection</span>
                 </div>
             </section>
         </main>
@@ -503,6 +513,12 @@
                     `;
                 }
  
+                // Update badge counts
+                document.getElementById('goals-count').innerText = data.goals ? data.goals.length : 0;
+                document.getElementById('tasks-count').innerText = data.tasks ? data.tasks.length : 0;
+                document.getElementById('milestones-count').innerText = data.milestones ? data.milestones.length : 0;
+                document.getElementById('reflections-count').innerText = data.reflections ? data.reflections.length : 0;
+ 
             } catch (err) {
                 console.error("Failed to fetch dashboard data:", err);
             }
@@ -516,9 +532,13 @@
                     body: JSON.stringify({ task_id: taskId })
                 });
                 if (res.ok) {
-                    fetchDashboard();
+                    showToast("Task status updated!", "success");
+                    await fetchDashboard();
+                } else {
+                    showToast("Failed to update task.", "error");
                 }
             } catch (e) {
+                showToast("Connection error while updating task.", "error");
                 console.error(e);
             }
         }
@@ -619,10 +639,36 @@
         }
 
         function openGoalModal() {
-            document.getElementById('goal-modal').style.display = 'block';
+            const modal = document.getElementById('goal-modal');
+            modal.style.display = 'block';
+            setTimeout(() => modal.classList.add('active'), 10);
         }
         function closeGoalModal() {
-            document.getElementById('goal-modal').style.display = 'none';
+            const modal = document.getElementById('goal-modal');
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            
+            let icon = 'fa-circle-info';
+            if (type === 'success') icon = 'fa-circle-check';
+            if (type === 'error') icon = 'fa-circle-exclamation';
+            
+            toast.innerHTML = `
+                <i class="fa-solid ${icon}"></i>
+                <span>${escapeHTML(message)}</span>
+            `;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('toast-fadeout');
+                toast.addEventListener('transitionend', () => toast.remove());
+            }, 3000);
         }
         async function submitGoal() {
             const title = document.getElementById('goal-title').value.trim();
@@ -647,10 +693,12 @@
                 
                 document.getElementById('goal-title').value = '';
                 document.getElementById('goal-desc').value = '';
+                showToast("Goal created successfully!", "success");
                 await fetchDashboard();
             } catch(e) {
                 loader.remove();
                 appendMessage('system', 'Failed to create goal.');
+                showToast("Failed to create goal.", "error");
                 console.error(e);
             } finally {
                 setLoadingState(false);
@@ -661,5 +709,6 @@
         fetchDashboard();
         setInterval(fetchDashboard, 10000); // refresh every 10s
     </script>
+    <div id="toast-container" style="position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 8px; z-index: 10000; pointer-events: none;"></div>
 </body>
 </html>
