@@ -911,7 +911,7 @@
             msg.className = `chat-message ${sender}`;
             msg.innerHTML = `
                 <div class="msg-avatar"><i data-lucide="${sender === 'user' ? 'user' : 'bot'}"></i></div>
-                <div class="msg-text">${escapeHTML(text).replace(/\n/g, '<br>')}</div>
+                <div class="msg-text">${parseMarkdown(text)}</div>
             `;
             output.appendChild(msg);
             output.scrollTop = output.scrollHeight;
@@ -920,6 +920,7 @@
         }
 
         function escapeHTML(str) {
+            if (!str) return '';
             return str.replace(/[&<>'"]/g, 
                 tag => ({
                     '&': '&amp;',
@@ -929,6 +930,57 @@
                     '"': '&quot;'
                 }[tag] || tag)
             );
+        }
+
+        function parseMarkdown(text) {
+            if (!text) return '';
+            // Escape HTML
+            let html = escapeHTML(text);
+            
+            // Format bold text **text**
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            // Format italic text *text*
+            html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            
+            // Format inline code `code`
+            html = html.replace(/`(.*?)`/g, '<code>$1</code>');
+            
+            // Format bullet lists: split lines, parse line by line
+            const lines = html.split('\n');
+            let inList = false;
+            const processedLines = lines.map(line => {
+                const trimmed = line.trim();
+                if (trimmed.startsWith('* ') || trimmed.startsWith('- ')) {
+                    const content = trimmed.substring(2);
+                    let prefix = '';
+                    if (!inList) {
+                        inList = true;
+                        prefix = '<ul style="margin: 6px 0; padding-left: 20px; list-style-type: disc;">';
+                    }
+                    return prefix + '<li style="margin-bottom: 4px;">' + content + '</li>';
+                } else {
+                    let suffix = '';
+                    if (inList) {
+                        inList = false;
+                        suffix = '</ul>';
+                    }
+                    return suffix + line;
+                }
+            });
+            if (inList) {
+                processedLines.push('</ul>');
+            }
+            
+            html = processedLines.join('\n');
+            // Format headers: ###, ##, #
+            html = html.replace(/### (.*?)(?=\n|<br>|$)/g, '<h4 style="margin: 12px 0 6px 0; font-weight:700; color:var(--text-primary); font-size:15px;">$1</h4>');
+            html = html.replace(/## (.*?)(?=\n|<br>|$)/g, '<h3 style="margin: 14px 0 8px 0; font-weight:700; color:var(--text-primary); font-size:16px;">$1</h3>');
+            html = html.replace(/# (.*?)(?=\n|<br>|$)/g, '<h2 style="margin: 16px 0 10px 0; font-weight:700; color:var(--text-primary); font-size:18px;">$1</h2>');
+            
+            // Format remaining line breaks
+            html = html.replace(/\n/g, '<br>');
+            return html;
         }
 
         function switchTab(tabId) {
