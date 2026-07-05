@@ -78,6 +78,48 @@
                 </div>
             </section>
 
+            <!-- Goal Progress Overview -->
+            <section class="overview-section" style="margin-bottom: 24px;">
+                <div class="card glass overview-card" style="padding: 20px; display: flex; flex-direction: column; gap: 16px; height: auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h2 style="font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 10px;">
+                            <i class="fa-solid fa-chart-line" style="color: var(--accent-blue);"></i> Goal Progress Overview
+                        </h2>
+                        <span id="streak-badge" class="badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; display: inline-flex; align-items: center; gap: 6px; text-transform: none; font-size: 11px;"><i class="fa-solid fa-fire"></i> <span id="streak-count">0</span> Day Streak</span>
+                    </div>
+                    
+                    <!-- Progress Bar Row -->
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600;">
+                            <span style="color: var(--text-secondary);">Overall Task Completion</span>
+                            <span id="completion-percentage" style="color: var(--accent-blue);">0%</span>
+                        </div>
+                        <div style="width: 100%; height: 8px; background: rgba(255, 255, 255, 0.05); border-radius: 4px; overflow: hidden; border: 1px solid var(--border-glass);">
+                            <div id="progress-bar-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple)); transition: width 0.5s ease; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Summary Cards Grid -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 16px;">
+                        <!-- Active Goals -->
+                        <div class="summary-card" style="background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-glass); padding: 12px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; gap: 4px;">
+                            <span style="font-size: 10px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Active Goals</span>
+                            <span id="active-goals-count" style="font-size: 20px; font-weight: 700; color: var(--accent-blue);">0</span>
+                        </div>
+                        <!-- Completed Tasks -->
+                        <div class="summary-card" style="background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-glass); padding: 12px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; gap: 4px;">
+                            <span style="font-size: 10px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Completed Tasks</span>
+                            <span id="completed-tasks-count" style="font-size: 20px; font-weight: 700; color: var(--accent-green);">0</span>
+                        </div>
+                        <!-- Remaining Tasks -->
+                        <div class="summary-card" style="background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-glass); padding: 12px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; gap: 4px;">
+                            <span style="font-size: 10px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Remaining Tasks</span>
+                            <span id="remaining-tasks-count" style="font-size: 20px; font-weight: 700; color: var(--accent-red);">0</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Grid Layout -->
             <div class="dashboard-grid">
                 <!-- Goals -->
@@ -169,10 +211,61 @@
             input.focus();
         }
 
+        function calculateStreak(reflections) {
+            if (!reflections || reflections.length === 0) return 0;
+            const sorted = [...reflections].sort((a, b) => new Date(b.date) - new Date(a.date));
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            const firstRefDate = new Date(sorted[0].date);
+            firstRefDate.setHours(0, 0, 0, 0);
+            if (firstRefDate < yesterday && firstRefDate.getTime() !== today.getTime()) {
+                return 0;
+            }
+            let streak = 0;
+            let expectedDate = new Date(firstRefDate);
+            for (let i = 0; i < sorted.length; i++) {
+                const refDate = new Date(sorted[i].date);
+                refDate.setHours(0, 0, 0, 0);
+                if (refDate.getTime() === expectedDate.getTime()) {
+                    streak++;
+                    expectedDate.setDate(expectedDate.getDate() - 1);
+                } else {
+                    break;
+                }
+            }
+            return streak;
+        }
+
         async function fetchDashboard() {
             try {
                 const response = await fetch('/api/dashboard');
                 const data = await response.json();
+                
+                // Calculate and update stats
+                const totalTasks = data.tasks ? data.tasks.length : 0;
+                const completedTasks = data.tasks ? data.tasks.filter(t => t.status === 'completed').length : 0;
+                const remainingTasks = totalTasks - completedTasks;
+                const activeGoals = data.goals ? data.goals.filter(g => g.status === 'in_progress').length : 0;
+                const completionPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+                
+                // Update stats DOM
+                document.getElementById('completion-percentage').innerText = `${completionPercentage}%`;
+                document.getElementById('progress-bar-fill').style.width = `${completionPercentage}%`;
+                document.getElementById('active-goals-count').innerText = activeGoals;
+                document.getElementById('completed-tasks-count').innerText = completedTasks;
+                document.getElementById('remaining-tasks-count').innerText = remainingTasks;
+                
+                // Streak
+                const streak = calculateStreak(data.reflections);
+                const streakBadge = document.getElementById('streak-badge');
+                if (streak > 0) {
+                    document.getElementById('streak-count').innerText = streak;
+                    streakBadge.style.display = 'inline-flex';
+                } else {
+                    streakBadge.style.display = 'none';
+                }
                 
                 // 1. Recommendation
                 const recContainer = document.getElementById('rec-card-container');
