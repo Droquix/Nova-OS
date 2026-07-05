@@ -238,6 +238,60 @@
             return streak;
         }
 
+        function setLoadingState(isLoading) {
+            const queryInput = document.getElementById('query-input');
+            const sendBtn = document.querySelector('.send-btn');
+            const newGoalBtn = document.querySelector('.top-header .btn-primary');
+            const modalSubmitBtn = document.querySelector('#goal-modal .btn-primary');
+            const ctaButtons = document.querySelectorAll('.empty-state-btn');
+            
+            if (queryInput) {
+                queryInput.disabled = isLoading;
+                queryInput.placeholder = isLoading 
+                    ? "NovaOS is thinking..." 
+                    : "Type a command (e.g., 'Plan a goal to run 5k in 2 months')...";
+            }
+            if (sendBtn) sendBtn.disabled = isLoading;
+            if (newGoalBtn) newGoalBtn.disabled = isLoading;
+            if (modalSubmitBtn) modalSubmitBtn.disabled = isLoading;
+            ctaButtons.forEach(btn => btn.disabled = isLoading);
+
+            if (isLoading) {
+                showSkeletons();
+            }
+        }
+
+        function showSkeletons() {
+            const skeletonHTML = `
+                <div class="skeleton-card">
+                    <div class="skeleton skeleton-text" style="width: 40%; height: 14px;"></div>
+                    <div class="skeleton skeleton-text" style="width: 85%;"></div>
+                    <div class="skeleton skeleton-text short" style="width: 60%;"></div>
+                </div>
+                <div class="skeleton-card">
+                    <div class="skeleton skeleton-text" style="width: 30%; height: 14px;"></div>
+                    <div class="skeleton skeleton-text" style="width: 70%;"></div>
+                </div>
+            `;
+
+            document.getElementById('goals-list').innerHTML = skeletonHTML;
+            document.getElementById('tasks-list').innerHTML = skeletonHTML;
+            document.getElementById('milestones-list').innerHTML = skeletonHTML;
+            document.getElementById('reflections-list').innerHTML = skeletonHTML;
+            
+            const recContainer = document.getElementById('rec-card-container');
+            if (recContainer) {
+                recContainer.innerHTML = `
+                    <div class="rec-icon skeleton" style="width: 48px; height: 48px; border-radius: 12px;"></div>
+                    <div class="rec-body" style="width: 80%;">
+                        <div class="skeleton skeleton-text" style="width: 50%; height: 14px; margin-bottom: 8px;"></div>
+                        <div class="skeleton skeleton-text" style="width: 90%;"></div>
+                        <div class="skeleton skeleton-text" style="width: 75%;"></div>
+                    </div>
+                `;
+            }
+        }
+
         async function fetchDashboard() {
             try {
                 const response = await fetch('/api/dashboard');
@@ -477,7 +531,8 @@
             input.value = '';
             appendMessage('user', query);
 
-            const loader = appendMessage('system', 'NovaOS processing request...');
+            const loader = appendMessage('system', 'NovaOS is thinking...');
+            setLoadingState(true);
             
             try {
                 const res = await fetch('/api/query', {
@@ -489,11 +544,13 @@
                 
                 loader.remove();
                 appendMessage('system', data.response);
-                fetchDashboard();
+                await fetchDashboard();
             } catch (err) {
                 loader.remove();
                 appendMessage('system', 'Error: Failed to process query.');
                 console.error(err);
+            } finally {
+                setLoadingState(false);
             }
         }
 
@@ -575,7 +632,8 @@
             closeGoalModal();
             const query = `Create a new goal titled "${title}" with description "${desc}".`;
             appendMessage('user', query);
-            const loader = appendMessage('system', 'Creating goal...');
+            const loader = appendMessage('system', 'NovaOS is thinking...');
+            setLoadingState(true);
             
             try {
                 const res = await fetch('/api/query', {
@@ -589,11 +647,13 @@
                 
                 document.getElementById('goal-title').value = '';
                 document.getElementById('goal-desc').value = '';
-                fetchDashboard();
+                await fetchDashboard();
             } catch(e) {
                 loader.remove();
                 appendMessage('system', 'Failed to create goal.');
                 console.error(e);
+            } finally {
+                setLoadingState(false);
             }
         }
 

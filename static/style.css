@@ -651,3 +651,41 @@ body {
 .btn-primary:hover {
     opacity: 0.9;
 }
+
+/* Skeletons */
+@keyframes skeleton-loading {
+    0% { background-color: rgba(255, 255, 255, 0.03); }
+    100% { background-color: rgba(255, 255, 255, 0.1); }
+}
+
+.skeleton {
+    animation: skeleton-loading 0.8s linear infinite alternate;
+    border-radius: 4px;
+}
+
+.skeleton-text {
+    height: 12px;
+    margin-bottom: 8px;
+    width: 80%;
+}
+
+.skeleton-text.short {
+    width: 50%;
+}
+
+.skeleton-card {
+    padding: 16px;
+    border: 1px solid var(--border-glass);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.01);
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+button:disabled, input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
