@@ -146,7 +146,7 @@ Provide an encouraging and structured response explaining the updates made, incl
         
     return Event(
         output=res_text,
-        content=res
+        content=types.Content(role="model", parts=[types.Part.from_text(text=res_text)])
     )
 
 @node(name="reflection_agent", rerun_on_resume=True)
@@ -171,7 +171,7 @@ Respond with a synthesis of their progress, identified patterns, and tips."""
         
     return Event(
         output=res_text,
-        content=res
+        content=types.Content(role="model", parts=[types.Part.from_text(text=res_text)])
     )
 
 @node(name="memory_update")
