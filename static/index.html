@@ -163,7 +163,12 @@
     </div>
 
     <!-- JS Logic -->
-    <script>
+        function prefillQuery(text) {
+            const input = document.getElementById('query-input');
+            input.value = text;
+            input.focus();
+        }
+
         async function fetchDashboard() {
             try {
                 const response = await fetch('/api/dashboard');
@@ -176,7 +181,7 @@
                 } else {
                     recText.innerText = "Initialize a goal or ask NovaOS to plan a task to get personalized recommendations.";
                 }
-
+ 
                 // 2. Goals
                 const goalsList = document.getElementById('goals-list');
                 goalsList.innerHTML = '';
@@ -194,9 +199,16 @@
                         goalsList.appendChild(item);
                     });
                 } else {
-                    goalsList.innerHTML = '<div class="empty-state">No goals created yet. Use the command box below to formulate one!</div>';
+                    goalsList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fa-solid fa-bullseye empty-state-icon"></i>
+                            <div class="empty-state-title">Define Your Path</div>
+                            <div class="empty-state-text">Establish long-term goals. NovaOS will decompose them into milestones and track progress.</div>
+                            <button class="empty-state-btn" onclick="openGoalModal()"><i class="fa-solid fa-plus"></i> Create Goal</button>
+                        </div>
+                    `;
                 }
-
+ 
                 // 3. Tasks
                 const tasksList = document.getElementById('tasks-list');
                 tasksList.innerHTML = '';
@@ -218,9 +230,16 @@
                         tasksList.appendChild(item);
                     });
                 } else {
-                    tasksList.innerHTML = '<div class="empty-state">No tasks due today. You are fully caught up!</div>';
+                    tasksList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fa-solid fa-list-check empty-state-icon"></i>
+                            <div class="empty-state-title">Actionable Steps</div>
+                            <div class="empty-state-text">Your daily schedule and checklist. Complete tasks to level up and unlock reflections.</div>
+                            <button class="empty-state-btn" onclick="prefillQuery('Plan daily tasks for my goals')"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate Tasks</button>
+                        </div>
+                    `;
                 }
-
+ 
                 // 4. Milestones
                 const milestonesList = document.getElementById('milestones-list');
                 milestonesList.innerHTML = '';
@@ -238,9 +257,16 @@
                         milestonesList.appendChild(item);
                     });
                 } else {
-                    milestonesList.innerHTML = '<div class="empty-state">No upcoming milestones defined.</div>';
+                    milestonesList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fa-solid fa-flag-checkered empty-state-icon"></i>
+                            <div class="empty-state-title">Upcoming Milestones</div>
+                            <div class="empty-state-text">AI-generated milestones mapping out your roadmap. Let NovaOS design a plan for you.</div>
+                            <button class="empty-state-btn" onclick="prefillQuery('Decompose my active goals into milestones')"><i class="fa-solid fa-map"></i> Generate Milestones</button>
+                        </div>
+                    `;
                 }
-
+ 
                 // 5. Reflections
                 const reflectionsList = document.getElementById('reflections-list');
                 reflectionsList.innerHTML = '';
@@ -258,9 +284,16 @@
                         reflectionsList.appendChild(item);
                     });
                 } else {
-                    reflectionsList.innerHTML = '<div class="empty-state">No reflections logged. Try logging one in the command box.</div>';
+                    reflectionsList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fa-solid fa-brain empty-state-icon"></i>
+                            <div class="empty-state-title">Weekly Reflection</div>
+                            <div class="empty-state-text">Review patterns, completion rates, and get recommendations to optimize your scheduling.</div>
+                            <button class="empty-state-btn" onclick="prefillQuery('Analyze my progress and log reflections')"><i class="fa-solid fa-clipboard-question"></i> Start Reflection</button>
+                        </div>
+                    `;
                 }
-
+ 
             } catch (err) {
                 console.error("Failed to fetch dashboard data:", err);
             }
