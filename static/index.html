@@ -3,213 +3,344 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NovaOS — AI Personal Operating System</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>NovaOS — Premium AI Personal Operating System</title>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <div class="glow-container">
-        <div class="glow-sphere sphere-1"></div>
-        <div class="glow-sphere sphere-2"></div>
-    </div>
-
-    <div class="dashboard-wrapper">
-        <!-- Sidebar -->
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
         <aside class="sidebar">
-            <div class="brand">
-                <i class="fa-solid fa-circle-nodes brand-icon"></i>
-                <span class="brand-name">NovaOS</span>
+            <div class="logo-container">
+                <div class="logo-icon">N</div>
+                <div class="logo-text">NovaOS</div>
             </div>
             
             <nav class="nav-menu">
-                <a href="#" class="nav-item active" onclick="switchTab('dashboard')">
-                    <i class="fa-solid fa-chart-simple"></i> Dashboard
-                </a>
-                <a href="#" class="nav-item" onclick="switchTab('goals')">
-                    <i class="fa-solid fa-bullseye"></i> Goals & Plans
-                </a>
-                <a href="#" class="nav-item" onclick="switchTab('tasks')">
-                    <i class="fa-solid fa-list-check"></i> Tasks
-                </a>
-                <a href="#" class="nav-item" onclick="switchTab('reflections')">
-                    <i class="fa-solid fa-brain"></i> Reflections
-                </a>
+                <div class="nav-item active" onclick="switchTab('dashboard')">
+                    <i data-lucide="layout-dashboard"></i> Dashboard
+                </div>
+                <div class="nav-item" onclick="switchTab('goals')">
+                    <i data-lucide="target"></i> Goals
+                </div>
+                <div class="nav-item" onclick="switchTab('planner')">
+                    <i data-lucide="calendar"></i> Planner
+                </div>
+                <div class="nav-item" onclick="switchTab('tasks')">
+                    <i data-lucide="list-todo"></i> Tasks
+                </div>
+                <div class="nav-item" onclick="switchTab('milestones')">
+                    <i data-lucide="flag"></i> Milestones
+                </div>
+                <div class="nav-item" onclick="switchTab('reflections')">
+                    <i data-lucide="brain"></i> Reflections
+                </div>
+                <div class="nav-item" onclick="switchTab('insights')">
+                    <i data-lucide="trending-up"></i> Insights
+                </div>
+                <div class="nav-item" onclick="switchTab('settings')">
+                    <i data-lucide="settings"></i> Settings
+                </div>
             </nav>
 
+            <!-- Profile Widget -->
             <div class="user-profile-widget">
-                <div class="profile-pic">
-                    <i class="fa-solid fa-user-astronaut"></i>
+                <div class="profile-main">
+                    <div class="profile-pic">
+                        <i data-lucide="user"></i>
+                    </div>
+                    <div class="profile-info">
+                        <div class="profile-name">Explorer</div>
+                        <div class="profile-status">Level 1 Pathfinder</div>
+                    </div>
                 </div>
-                <div class="profile-info">
-                    <div class="profile-name">Explorer</div>
-                    <div class="profile-status">Level 1 Pathfinder</div>
+                <div class="profile-progress-bar">
+                    <div class="profile-progress-fill" id="profile-progress-fill" style="width: 30%"></div>
                 </div>
             </div>
         </aside>
 
-        <!-- Main Content -->
+        <!-- Main Content Area -->
         <main class="main-content">
             <!-- Header -->
             <header class="top-header">
                 <div class="header-search">
-                    <h1>NovaOS Dashboard</h1>
-                    <p class="subtitle">Secure AI Personal Operating System</p>
+                    <h1 id="page-title">Dashboard</h1>
+                    <p class="subtitle" id="page-subtitle">Welcome back, Explorer. Secure AI operations verified.</p>
                 </div>
                 <div class="header-actions">
                     <button class="btn btn-primary" onclick="openGoalModal()">
-                        <i class="fa-solid fa-plus"></i> New Goal
+                        <i data-lucide="plus"></i> New Goal
                     </button>
                 </div>
             </header>
 
-            <!-- Recommendation Panel -->
-            <section class="rec-panel">
-                <div class="card glass rec-card" id="rec-card-container">
-                    <div class="rec-icon">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <!-- ==============================================
+                 TAB VIEW: DASHBOARD
+                 ============================================== -->
+            <div id="view-dashboard" class="viewport-panel active">
+                <!-- Today's AI Recommendation Hero Card -->
+                <section class="rec-panel">
+                    <div class="card rec-card" id="rec-card-container">
+                        <div class="rec-icon">
+                            <i data-lucide="sparkles"></i>
+                        </div>
+                        <div class="rec-body">
+                            <h3>Today's AI Recommendation</h3>
+                            <p id="ai-rec-text">Initialize a goal to receive personalized daily recommendations.</p>
+                        </div>
                     </div>
-                    <div class="rec-body">
-                        <h3>Today's AI Recommendation</h3>
-                        <p id="ai-rec-text">Initialize a goal to receive personalized daily recommendations.</p>
-                    </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Goal Progress Overview -->
-            <section class="overview-section" style="margin-bottom: 24px;">
-                <div class="card glass overview-card" style="padding: 20px; display: flex; flex-direction: column; gap: 16px; height: auto;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h2 style="font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 10px;">
-                            <i class="fa-solid fa-chart-line" style="color: var(--accent-blue);"></i> Goal Progress Overview
-                        </h2>
-                        <span id="streak-badge" class="badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; display: inline-flex; align-items: center; gap: 6px; text-transform: none; font-size: 11px;"><i class="fa-solid fa-fire"></i> <span id="streak-count">0</span> Day Streak</span>
+                <!-- Goal Progress Overview -->
+                <section class="overview-section" style="margin-bottom: 32px;">
+                    <div class="card overview-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h2 style="font-family: var(--font-header); font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                                <i data-lucide="presentation" style="color: var(--accent-orange);"></i> Goal Progress Overview
+                            </h2>
+                            <span id="streak-badge" class="badge" style="background-color: var(--accent-orange-light); color: var(--accent-orange); display: inline-flex; align-items: center; gap: 4px; text-transform: none;">
+                                <i data-lucide="flame"></i> <span id="streak-count">0</span> Day Streak
+                            </span>
+                        </div>
+                        
+                        <!-- Progress Bar -->
+                        <div class="progress-container" style="margin-bottom: 24px;">
+                            <div class="progress-header">
+                                <span style="color: var(--text-secondary);">Overall Task Completion</span>
+                                <span id="completion-percentage" style="color: var(--accent-orange);">0%</span>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Statistics Grid -->
+                        <div class="summary-grid">
+                            <div class="summary-card">
+                                <span class="summary-card-title">Active Goals</span>
+                                <span class="summary-card-value" id="active-goals-count" style="color: var(--accent-orange);">0</span>
+                            </div>
+                            <div class="summary-card">
+                                <span class="summary-card-title">Completed Tasks</span>
+                                <span class="summary-card-value" id="completed-tasks-count" style="color: var(--accent-green);">0</span>
+                            </div>
+                            <div class="summary-card">
+                                <span class="summary-card-title">Remaining Tasks</span>
+                                <span class="summary-card-value" id="remaining-tasks-count" style="color: var(--accent-red);">0</span>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <!-- Progress Bar Row -->
-                    <div style="display: flex; flex-direction: column; gap: 8px;">
-                        <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600;">
-                            <span style="color: var(--text-secondary);">Overall Task Completion</span>
-                            <span id="completion-percentage" style="color: var(--accent-blue);">0%</span>
-                        </div>
-                        <div style="width: 100%; height: 8px; background: rgba(255, 255, 255, 0.05); border-radius: 4px; overflow: hidden; border: 1px solid var(--border-glass);">
-                            <div id="progress-bar-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple)); transition: width 0.5s ease; border-radius: 4px;"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- Summary Cards Grid -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 16px;">
-                        <!-- Active Goals -->
-                        <div class="summary-card" style="background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-glass); padding: 12px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; gap: 4px;">
-                            <span style="font-size: 10px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Active Goals</span>
-                            <span id="active-goals-count" style="font-size: 20px; font-weight: 700; color: var(--accent-blue);">0</span>
-                        </div>
-                        <!-- Completed Tasks -->
-                        <div class="summary-card" style="background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-glass); padding: 12px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; gap: 4px;">
-                            <span style="font-size: 10px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Completed Tasks</span>
-                            <span id="completed-tasks-count" style="font-size: 20px; font-weight: 700; color: var(--accent-green);">0</span>
-                        </div>
-                        <!-- Remaining Tasks -->
-                        <div class="summary-card" style="background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-glass); padding: 12px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; gap: 4px;">
-                            <span style="font-size: 10px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Remaining Tasks</span>
-                            <span id="remaining-tasks-count" style="font-size: 20px; font-weight: 700; color: var(--accent-red);">0</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Grid Layout -->
-            <div class="dashboard-grid">
-                <!-- Goals -->
-                <div class="card glass grid-item goals-card">
-                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                        <h2 style="margin: 0;"><i class="fa-solid fa-bullseye card-icon icon-goal"></i> Current Goals</h2>
-                        <span id="goals-count" class="badge-count" style="font-size: 11px; padding: 2px 6px; border-radius: 10px; background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); font-weight: 700;">0</span>
+                <!-- Double Column Layout -->
+                <div class="dashboard-grid">
+                    <!-- Goals list wrapper for dashboard compatibility -->
+                    <div class="card grid-item goals-card" style="display:none;">
+                        <div class="card-body" id="goals-list"></div>
                     </div>
-                    <div class="card-body scrollable" id="goals-list">
-                        <!-- Goals dynamic insertion -->
-                    </div>
-                </div>
 
-                <!-- Today's Tasks -->
-                <div class="card glass grid-item tasks-card">
-                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                        <h2 style="margin: 0;"><i class="fa-solid fa-list-check card-icon icon-task"></i> Today's Tasks</h2>
-                        <span id="tasks-count" class="badge-count" style="font-size: 11px; padding: 2px 6px; border-radius: 10px; background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); font-weight: 700;">0</span>
+                    <!-- Tasks Card -->
+                    <div class="card grid-item tasks-card">
+                        <div class="card-header">
+                            <h2><i data-lucide="check-circle" style="color: var(--accent-orange);"></i> Today's Tasks</h2>
+                            <span id="tasks-count" class="badge badge-in_progress">0</span>
+                        </div>
+                        <div class="card-body scrollable" id="tasks-list">
+                            <!-- Injected dynamically -->
+                        </div>
                     </div>
-                    <div class="card-body scrollable" id="tasks-list">
-                        <!-- Tasks dynamic insertion -->
-                    </div>
-                </div>
 
-                <!-- Milestones -->
-                <div class="card glass grid-item milestones-card">
-                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                        <h2 style="margin: 0;"><i class="fa-solid fa-flag-checkered card-icon icon-milestone"></i> Upcoming Milestones</h2>
-                        <span id="milestones-count" class="badge-count" style="font-size: 11px; padding: 2px 6px; border-radius: 10px; background: rgba(34, 197, 94, 0.15); color: var(--accent-green); font-weight: 700;">0</span>
-                    </div>
-                    <div class="card-body scrollable" id="milestones-list">
-                        <!-- Milestones dynamic insertion -->
+                    <!-- Milestones Card -->
+                    <div class="card grid-item milestones-card">
+                        <div class="card-header">
+                            <h2><i data-lucide="flag" style="color: var(--accent-green);"></i> Upcoming Milestones</h2>
+                            <span id="milestones-count" class="badge badge-completed">0</span>
+                        </div>
+                        <div class="card-body scrollable" id="milestones-list">
+                            <!-- Injected dynamically -->
+                        </div>
                     </div>
                 </div>
 
-                <!-- Reflections -->
-                <div class="card glass grid-item reflections-card">
-                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                        <h2 style="margin: 0;"><i class="fa-solid fa-brain card-icon icon-reflection"></i> Recent Reflections</h2>
-                        <span id="reflections-count" class="badge-count" style="font-size: 11px; padding: 2px 6px; border-radius: 10px; background: rgba(244, 114, 182, 0.15); color: #f472b6; font-weight: 700;">0</span>
+                <!-- Second Row Column Layout -->
+                <div class="dashboard-grid">
+                    <!-- Reflections Card -->
+                    <div class="card grid-item reflections-card">
+                        <div class="card-header">
+                            <h2><i data-lucide="brain" style="color: var(--accent-blue);"></i> Recent Reflections</h2>
+                            <span id="reflections-count" class="badge badge-in_progress">0</span>
+                        </div>
+                        <div class="card-body scrollable" id="reflections-list">
+                            <!-- Injected dynamically -->
+                        </div>
                     </div>
-                    <div class="card-body scrollable" id="reflections-list">
-                        <!-- Reflections dynamic insertion -->
+
+                    <!-- AI Insights Panel -->
+                    <div class="card grid-item insights-card">
+                        <div class="card-header">
+                            <h2><i data-lucide="sparkles" style="color: var(--accent-orange);"></i> AI Productivity Insights</h2>
+                        </div>
+                        <div class="card-body scrollable" id="ai-insights-panel">
+                            <div class="empty-state">
+                                <i data-lucide="activity" class="empty-state-icon"></i>
+                                <div class="empty-state-title">Insight Synthesis</div>
+                                <div class="empty-state-text">NovaOS compiles daily habits to highlight optimization areas. Add tasks and reflections to start mapping performance trends.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Command Terminal Section -->
+                <section class="chat-section">
+                    <div class="chat-header">
+                        <h3><i data-lucide="terminal"></i> Command NovaOS</h3>
+                        <span class="security-badge"><i data-lucide="shield-check"></i> Encrypted Terminal Session</span>
+                    </div>
+                    <div class="chat-output" id="chat-output">
+                        <div class="chat-message system">
+                            <div class="msg-avatar"><i data-lucide="bot"></i></div>
+                            <div class="msg-text">Welcome to NovaOS. Ask me to create a goal, plan milestones, prioritize tasks, or log reflections. All commands are secure and verified.</div>
+                        </div>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" id="query-input" placeholder="Type a command (e.g., 'Plan a goal to run 5k in 2 months' or 'Log reflection for today')..." onkeydown="if(event.key === 'Enter') sendQuery()">
+                        <button class="send-btn" onclick="sendQuery()"><i data-lucide="send"></i></button>
+                    </div>
+                    <div class="terminal-suggestions">
+                        <span class="suggestion-chip" onclick="prefillQuery('Plan a goal to run 5k in 2 months')"><i data-lucide="sparkles"></i> Plan Goal</span>
+                        <span class="suggestion-chip" onclick="prefillQuery('Plan daily tasks for my goals')"><i data-lucide="list-todo"></i> Generate Tasks</span>
+                        <span class="suggestion-chip" onclick="prefillQuery('Decompose my active goals into milestones')"><i data-lucide="map"></i> Generate Milestones</span>
+                        <span class="suggestion-chip" onclick="prefillQuery('Analyze my progress and log reflections')"><i data-lucide="clipboard-list"></i> Daily Reflection</span>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ==============================================
+                 TAB VIEW: GOALS PAGE
+                 ============================================== -->
+            <div id="view-goals" class="viewport-panel">
+                <div class="goals-grid" id="goals-page-list">
+                    <!-- Goals views injected dynamically -->
+                </div>
+            </div>
+
+            <!-- ==============================================
+                 TAB VIEW: PLANNER PAGE
+                 ============================================== -->
+            <div id="view-planner" class="viewport-panel">
+                <div class="planner-view">
+                    <div class="planner-timeline" id="planner-timeline-grid">
+                        <!-- Timeline hour slots & contents injected dynamically -->
                     </div>
                 </div>
             </div>
 
-            <!-- Chat / Query Interface -->
-            <section class="chat-section glass">
-                <div class="chat-header">
-                    <h3><i class="fa-solid fa-terminal"></i> Command NovaOS</h3>
-                    <span class="security-badge"><i class="fa-solid fa-shield-halved"></i> Security Protected</span>
+            <!-- ==============================================
+                 TAB VIEW: TASKS PAGE
+                 ============================================== -->
+            <div id="view-tasks" class="viewport-panel">
+                <div class="tasks-grid" id="tasks-page-list">
+                    <!-- Task cards views injected dynamically -->
                 </div>
-                <div class="chat-output" id="chat-output">
-                    <div class="chat-message system">
-                        <div class="msg-avatar"><i class="fa-solid fa-robot"></i></div>
-                        <div class="msg-text">Welcome to NovaOS. Ask me to create a goal, plan milestones, prioritize tasks, or log your reflections.</div>
+            </div>
+
+            <!-- ==============================================
+                 TAB VIEW: MILESTONES PAGE
+                 ============================================== -->
+            <div id="view-milestones" class="viewport-panel">
+                <div class="tasks-grid" id="milestones-page-list">
+                    <!-- Milestones views injected dynamically -->
+                </div>
+            </div>
+
+            <!-- ==============================================
+                 TAB VIEW: REFLECTIONS PAGE
+                 ============================================== -->
+            <div id="view-reflections" class="viewport-panel">
+                <div class="reflection-grid" id="reflections-page-list">
+                    <!-- Reflection cards views injected dynamically -->
+                </div>
+            </div>
+
+            <!-- ==============================================
+                 TAB VIEW: INSIGHTS PAGE
+                 ============================================== -->
+            <div id="view-insights" class="viewport-panel">
+                <div class="insights-grid">
+                    <div class="insight-metric-card">
+                        <i data-lucide="calendar-check" style="font-size: 24px; color: var(--accent-orange);"></i>
+                        <h3>Task Completion Rate</h3>
+                        <div class="insight-metric-val" id="insights-completion-rate">0%</div>
+                        <p style="font-size: 13px; color: var(--text-secondary);">Average completed tasks compared to scheduled targets.</p>
+                    </div>
+                    <div class="insight-metric-card">
+                        <i data-lucide="clock" style="font-size: 24px; color: var(--accent-green);"></i>
+                        <h3>Total Focus Time</h3>
+                        <div class="insight-metric-val" id="insights-focus-time">0h</div>
+                        <p style="font-size: 13px; color: var(--text-secondary);">Cumulative focused work blocks generated by NovaOS.</p>
+                    </div>
+                    <div class="insight-metric-card">
+                        <i data-lucide="flame" style="font-size: 24px; color: #F59E0B;"></i>
+                        <h3>Habit Strength</h3>
+                        <div class="insight-metric-val" id="insights-habit-strength">0</div>
+                        <p style="font-size: 13px; color: var(--text-secondary);">Consecutive daily reflections submitted by Explorer.</p>
                     </div>
                 </div>
-                <div class="chat-input-area">
-                    <input type="text" id="query-input" placeholder="Type a command (e.g., 'Plan a goal to run 5k in 2 months' or 'Log reflection for today')..." onkeydown="if(event.key === 'Enter') sendQuery()">
-                    <button class="send-btn" onclick="sendQuery()"><i class="fa-solid fa-paper-plane"></i></button>
+                <div class="card" style="margin-top: 32px; padding: 28px;">
+                    <h3 style="font-family: var(--font-header); font-size: 18px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;"><i data-lucide="lightbulb" style="color: var(--accent-orange);"></i> Active AI Strategy</h3>
+                    <p style="font-size: 14.5px; color: var(--text-secondary); line-height: 1.6;" id="insights-active-strategy">
+                        NovaOS is currently tracking your goal progress. Define a goal or execute tasks to help the model learn your behavior patterns and generate personalized productivity strategies.
+                    </p>
                 </div>
-                <div class="terminal-suggestions" style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; padding: 0 4px;">
-                    <span class="suggestion-chip" onclick="prefillQuery('Plan a goal to run 5k in 2 months')"><i class="fa-solid fa-wand-magic-sparkles"></i> Plan Goal</span>
-                    <span class="suggestion-chip" onclick="prefillQuery('Plan daily tasks for my goals')"><i class="fa-solid fa-list-check"></i> Generate Tasks</span>
-                    <span class="suggestion-chip" onclick="prefillQuery('Decompose my active goals into milestones')"><i class="fa-solid fa-map"></i> Generate Milestones</span>
-                    <span class="suggestion-chip" onclick="prefillQuery('Analyze my progress and log reflections')"><i class="fa-solid fa-clipboard-question"></i> Daily Reflection</span>
+            </div>
+
+            <!-- ==============================================
+                 TAB VIEW: SETTINGS PAGE
+                 ============================================== -->
+            <div id="view-settings" class="viewport-panel">
+                <div class="card" style="padding: 32px; max-width: 600px;">
+                    <h3 style="font-family: var(--font-header); font-size: 20px; font-weight: 700; margin-bottom: 24px;"><i data-lucide="sliders"></i> System Settings</h3>
+                    <div class="form-group">
+                        <label>Active LLM Model</label>
+                        <input type="text" value="gemini-2.5-flash" disabled style="background-color: #EAE8E4; color: var(--text-secondary);">
+                    </div>
+                    <div class="form-group">
+                        <label>FastAPI Status</label>
+                        <div style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--accent-green);">
+                            <span style="width: 8px; height: 8px; background-color: var(--accent-green); border-radius: 50%;"></span> Operational
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>MCP Server Connection</label>
+                        <div style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--accent-green);">
+                            <span style="width: 8px; height: 8px; background-color: var(--accent-green); border-radius: 50%;"></span> Active
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="showToast('Settings saved!', 'success')" style="margin-top: 16px;">Save Settings</button>
                 </div>
-            </section>
+            </div>
         </main>
     </div>
 
     <!-- Modal for new goal -->
     <div id="goal-modal" class="modal">
-        <div class="modal-content glass">
-            <div class="modal-header">
-                <h2>Create New Goal</h2>
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="margin: 0; font-family: var(--font-header); font-size: 18px; font-weight: 700;">Create New Goal</h3>
                 <span class="close-btn" onclick="closeGoalModal()">&times;</span>
             </div>
             <div class="modal-body">
                 <div class="form-group">
                     <label for="goal-title">Goal Title</label>
-                    <input type="text" id="goal-title" placeholder="e.g. Learn French, Study ML">
+                    <input type="text" id="goal-title" placeholder="e.g., Learn French, Study ML">
                 </div>
                 <div class="form-group">
                     <label for="goal-desc">Description</label>
                     <textarea id="goal-desc" placeholder="Details or notes about this goal..."></textarea>
                 </div>
-                <button class="btn btn-primary" onclick="submitGoal()">Create Goal</button>
+                <button class="btn btn-primary" onclick="submitGoal()"><i data-lucide="check"></i> Create Goal</button>
             </div>
         </div>
     </div>
@@ -301,6 +432,14 @@
                     </div>
                 `;
             }
+            
+            // Sub-pages skeletons
+            const goalsPage = document.getElementById('goals-page-list');
+            if (goalsPage) goalsPage.innerHTML = skeletonHTML;
+            const tasksPage = document.getElementById('tasks-page-list');
+            if (tasksPage) tasksPage.innerHTML = skeletonHTML;
+            const reflectionsPage = document.getElementById('reflections-page-list');
+            if (reflectionsPage) reflectionsPage.innerHTML = skeletonHTML;
         }
 
         async function fetchDashboard() {
@@ -312,7 +451,7 @@
                 const totalTasks = data.tasks ? data.tasks.length : 0;
                 const completedTasks = data.tasks ? data.tasks.filter(t => t.status === 'completed').length : 0;
                 const remainingTasks = totalTasks - completedTasks;
-                const activeGoals = data.goals ? data.goals.filter(g => g.status === 'in_progress').length : 0;
+                const activeGoals = data.goals ? data.goals.filter(g => g.status === 'in_progress' || g.status === 'pending').length : 0;
                 const completionPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
                 
                 // Update stats DOM
@@ -322,8 +461,24 @@
                 document.getElementById('completed-tasks-count').innerText = completedTasks;
                 document.getElementById('remaining-tasks-count').innerText = remainingTasks;
                 
+                // Sidebar profile widget level calculator
+                const progressFill = document.getElementById('profile-progress-fill');
+                if (progressFill) {
+                    progressFill.style.width = `${completionPercentage}%`;
+                }
+                const levelStatus = document.querySelector('.profile-status');
+                if (levelStatus) {
+                    const level = Math.floor(completedTasks / 3) + 1;
+                    levelStatus.innerText = `Level ${level} Pathfinder`;
+                }
+
+                // Insights Page updates
+                document.getElementById('insights-completion-rate').innerText = `${completionPercentage}%`;
+                document.getElementById('insights-focus-time').innerText = `${completedTasks * 45}m`;
+                
                 // Streak
                 const streak = calculateStreak(data.reflections);
+                document.getElementById('insights-habit-strength').innerText = streak;
                 const streakBadge = document.getElementById('streak-badge');
                 if (streak > 0) {
                     document.getElementById('streak-count').innerText = streak;
@@ -332,16 +487,16 @@
                     streakBadge.style.display = 'none';
                 }
                 
-                // 1. Recommendation
+                // 1. Recommendation Card (Hero)
                 const recContainer = document.getElementById('rec-card-container');
                 if (!data.goals || data.goals.length === 0) {
                     recContainer.innerHTML = `
                         <div class="rec-icon">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <i data-lucide="sparkles"></i>
                         </div>
                         <div class="rec-body">
-                            <h3 style="margin: 0; font-size: 15px; font-weight: 700; font-family: 'Outfit', sans-serif;">Today's AI Recommendation</h3>
-                            <p style="margin-top: 6px; font-size: 12.5px; line-height: 1.5; color: var(--text-secondary);">Create your first goal to receive personalized AI recommendations. NovaOS will analyze your objectives, workload, and completion rates to generate daily focus sessions and productivity suggestions.</p>
+                            <h3 style="margin: 0; font-size: 18px; font-weight: 700; font-family: var(--font-header);">Today's AI Recommendation</h3>
+                            <p style="margin-top: 6px; font-size: 14px; line-height: 1.5; color: var(--text-secondary);">Define your first goal to unlock personalized AI suggestions. NovaOS will decompose goals, evaluate tasks, and build custom study paths based on your schedule.</p>
                         </div>
                     `;
                 } else {
@@ -349,60 +504,62 @@
                     if (rec && typeof rec === 'object' && rec.title) {
                         recContainer.innerHTML = `
                             <div class="rec-icon">
-                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                <i data-lucide="sparkles"></i>
                             </div>
                             <div class="rec-body" style="width: 100%;">
-                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; width: 100%;">
-                                    <h3 style="margin: 0; font-size: 15px; font-weight: 700; font-family: 'Outfit', sans-serif;">${escapeHTML(rec.title)}</h3>
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; width: 100%; flex-wrap: wrap; gap: 8px;">
+                                    <h3 style="margin: 0; font-size: 18px; font-weight: 700; font-family: var(--font-header);">${escapeHTML(rec.title)}</h3>
                                     <div style="display: flex; gap: 8px; align-items: center;">
-                                        <span class="priority-tag" style="background: rgba(255, 255, 255, 0.05); color: var(--text-secondary); margin-left: 0; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 600;"><i class="fa-regular fa-clock"></i> ${escapeHTML(rec.duration || 'N/A')}</span>
-                                        <span class="priority-tag priority-${escapeHTML(rec.priority || 'medium')}" style="margin-left: 0; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 600; text-transform: uppercase;">${escapeHTML(rec.priority || 'medium')}</span>
+                                        <span class="priority-tag" style="background-color: var(--border-color); color: var(--text-secondary); font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: 600;"><i data-lucide="clock" style="width:12px;height:12px;display:inline-block;vertical-align:middle;margin-right:4px;"></i> ${escapeHTML(rec.duration || '45 mins')}</span>
+                                        <span class="priority-tag priority-${escapeHTML(rec.priority || 'medium')}" style="font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: 600;">${escapeHTML(rec.priority || 'medium')}</span>
                                     </div>
                                 </div>
-                                <ul style="list-style-type: none; padding-left: 0; margin-top: 8px; display: flex; flex-direction: column; gap: 4px;">
+                                <ul style="list-style-type: none; padding-left: 0; margin-top: 12px; display: flex; flex-direction: column; gap: 6px;">
                                     ${(rec.reasoning || []).map(point => `
-                                        <li style="font-size: 12.5px; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 8px; line-height: 1.4;">
-                                            <i class="fa-solid fa-circle-check" style="color: var(--accent-blue); font-size: 11px; margin-top: 4px;"></i>
+                                        <li style="font-size: 13.5px; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 8px; line-height: 1.4;">
+                                            <i data-lucide="check-circle-2" style="color: var(--accent-orange); width: 14px; height: 14px; margin-top: 3px; flex-shrink:0;"></i>
                                             <span>${escapeHTML(point)}</span>
                                         </li>
                                     `).join('')}
                                 </ul>
+                                <button class="btn btn-primary" onclick="prefillQuery('Focus session on recommended task: ${escapeHTML(rec.title)}')" style="margin-top: 16px; padding: 8px 16px; font-size: 13px;"><i data-lucide="bolt"></i> Activate Recommendation</button>
                             </div>
                         `;
                     } else {
                         // Fallback structured recommendation
                         recContainer.innerHTML = `
                             <div class="rec-icon">
-                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                <i data-lucide="sparkles"></i>
                             </div>
                             <div class="rec-body" style="width: 100%;">
-                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; width: 100%;">
-                                    <h3 style="margin: 0; font-size: 15px; font-weight: 700; font-family: 'Outfit', sans-serif;">Optimize Goal Execution</h3>
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; width: 100%; flex-wrap: wrap; gap: 8px;">
+                                    <h3 style="margin: 0; font-size: 18px; font-weight: 700; font-family: var(--font-header);">Optimize Goal Execution</h3>
                                     <div style="display: flex; gap: 8px; align-items: center;">
-                                        <span class="priority-tag" style="background: rgba(255, 255, 255, 0.05); color: var(--text-secondary); margin-left: 0; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 600;"><i class="fa-regular fa-clock"></i> 45 mins</span>
-                                        <span class="priority-tag priority-high" style="margin-left: 0; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 600; text-transform: uppercase;">high</span>
+                                        <span class="priority-tag" style="background-color: var(--border-color); color: var(--text-secondary); font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: 600;"><i data-lucide="clock" style="width:12px;height:12px;display:inline-block;vertical-align:middle;margin-right:4px;"></i> 45 mins</span>
+                                        <span class="priority-tag priority-high" style="font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: 600;">high</span>
                                     </div>
                                 </div>
-                                <ul style="list-style-type: none; padding-left: 0; margin-top: 8px; display: flex; flex-direction: column; gap: 4px;">
-                                    <li style="font-size: 12.5px; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 8px; line-height: 1.4;">
-                                        <i class="fa-solid fa-circle-check" style="color: var(--accent-blue); font-size: 11px; margin-top: 4px;"></i>
-                                        <span>Decompose your new goals into milestones.</span>
+                                <ul style="list-style-type: none; padding-left: 0; margin-top: 12px; display: flex; flex-direction: column; gap: 6px;">
+                                    <li style="font-size: 13.5px; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 8px; line-height: 1.4;">
+                                        <i data-lucide="check-circle-2" style="color: var(--accent-orange); width: 14px; height: 14px; margin-top: 3px; flex-shrink:0;"></i>
+                                        <span>Decompose your active goals into milestones.</span>
                                     </li>
-                                    <li style="font-size: 12.5px; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 8px; line-height: 1.4;">
-                                        <i class="fa-solid fa-circle-check" style="color: var(--accent-blue); font-size: 11px; margin-top: 4px;"></i>
-                                        <span>Plan 2-3 high priority tasks for today.</span>
+                                    <li style="font-size: 13.5px; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 8px; line-height: 1.4;">
+                                        <i data-lucide="check-circle-2" style="color: var(--accent-orange); width: 14px; height: 14px; margin-top: 3px; flex-shrink:0;"></i>
+                                        <span>Plan 2-3 high priority tasks for today to generate momentum.</span>
                                     </li>
-                                    <li style="font-size: 12.5px; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 8px; line-height: 1.4;">
-                                        <i class="fa-solid fa-circle-check" style="color: var(--accent-blue); font-size: 11px; margin-top: 4px;"></i>
+                                    <li style="font-size: 13.5px; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 8px; line-height: 1.4;">
+                                        <i data-lucide="check-circle-2" style="color: var(--accent-orange); width: 14px; height: 14px; margin-top: 3px; flex-shrink:0;"></i>
                                         <span>Complete reflections at end of day to help NovaOS adapt recommendations.</span>
                                     </li>
                                 </ul>
+                                <button class="btn btn-primary" onclick="prefillQuery('Generate daily plan')" style="margin-top: 16px; padding: 8px 16px; font-size: 13px;"><i data-lucide="bolt"></i> Optimize Plan</button>
                             </div>
                         `;
                     }
                 }
  
-                // 2. Goals
+                // 2. Goals (Dashboard Grid Card - Hidden visually, but updated for compatibility)
                 const goalsList = document.getElementById('goals-list');
                 goalsList.innerHTML = '';
                 if (data.goals && data.goals.length > 0) {
@@ -418,28 +575,91 @@
                         `;
                         goalsList.appendChild(item);
                     });
+                }
+
+                // 2b. Goals Page render (Grid list)
+                const goalsPageList = document.getElementById('goals-page-list');
+                goalsPageList.innerHTML = '';
+                if (data.goals && data.goals.length > 0) {
+                    data.goals.forEach(goal => {
+                        const linkedTasks = data.tasks ? data.tasks.filter(t => t.goal_id === goal.id) : [];
+                        const linkedTasksCompleted = linkedTasks.filter(t => t.status === 'completed').length;
+                        const goalProgress = linkedTasks.length > 0 ? Math.round((linkedTasksCompleted / linkedTasks.length) * 100) : 0;
+                        const linkedMilestones = data.milestones ? data.milestones.filter(m => m.goal_id === goal.id) : [];
+
+                        const card = document.createElement('div');
+                        card.className = 'goal-card';
+                        card.innerHTML = `
+                            <div class="goal-card-header">
+                                <div class="goal-card-title">${escapeHTML(goal.title)}</div>
+                                <span class="badge badge-${goal.status}">${goal.status}</span>
+                            </div>
+                            <div class="goal-card-desc">${escapeHTML(goal.description || 'No description provided.')}</div>
+                            
+                            <div class="progress-container">
+                                <div class="progress-header">
+                                    <span style="color: var(--text-secondary);">Goal Progress</span>
+                                    <span style="color: var(--accent-orange); font-weight:700;">${goalProgress}%</span>
+                                </div>
+                                <div class="progress-bar-bg">
+                                    <div class="progress-bar-fill" style="width: ${goalProgress}%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="goal-meta-grid">
+                                <div class="goal-meta-item">
+                                    <span class="goal-meta-label">Task Status</span>
+                                    <span class="goal-meta-value">${linkedTasksCompleted} / ${linkedTasks.length} Completed</span>
+                                </div>
+                                <div class="goal-meta-item">
+                                    <span class="goal-meta-label">Milestones</span>
+                                    <span class="goal-meta-value">${linkedMilestones.length} active</span>
+                                </div>
+                            </div>
+
+                            <div class="goal-strategy-summary">
+                                <span class="goal-strategy-title"><i data-lucide="cpu" style="width:12px;height:12px;margin-top:2px;"></i> AI Strategy Summary</span>
+                                <span class="goal-strategy-text">Targeting key results. Decomposing milestones is recommended to maintain a steady ${goalProgress > 50 ? 'high' : 'standard'} momentum.</span>
+                            </div>
+
+                            <div style="font-size: 12px; color: var(--text-secondary);">
+                                <strong>Linked Milestones Checklist:</strong>
+                                <ul style="list-style-type: none; padding-left: 0; margin-top: 6px; display:flex; flex-direction:column; gap:4px;">
+                                    ${linkedMilestones.map(m => `
+                                        <li style="display:flex; align-items:center; gap:6px;">
+                                            <i data-lucide="${m.status === 'completed' ? 'check-circle' : 'circle'}" style="color:${m.status === 'completed' ? 'var(--accent-green)' : 'var(--text-muted)'}; width:13px; height:13px;"></i>
+                                            <span>${escapeHTML(m.title)}</span>
+                                        </li>
+                                    `).join('') || '<li style="color:var(--text-muted);">No milestones created. Use Command Terminal to break down goals.</li>'}
+                                </ul>
+                            </div>
+                        `;
+                        goalsPageList.appendChild(card);
+                    });
                 } else {
-                    goalsList.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fa-solid fa-bullseye empty-state-icon"></i>
-                            <div class="empty-state-title">Define Your Path</div>
-                            <div class="empty-state-text">Establish long-term goals. NovaOS will decompose them into milestones and track progress.</div>
-                            <button class="empty-state-btn" onclick="openGoalModal()"><i class="fa-solid fa-plus"></i> Create Goal</button>
+                    goalsPageList.innerHTML = `
+                        <div class="card" style="padding: 40px; text-align: center; width: 100%;">
+                            <div class="empty-state">
+                                <i data-lucide="target" class="empty-state-icon" style="font-size:42px;"></i>
+                                <div class="empty-state-title">No goals defined</div>
+                                <div class="empty-state-text">Establish your objectives. NovaOS will create operational roadmaps for execution.</div>
+                                <button class="btn btn-primary" onclick="openGoalModal()"><i data-lucide="plus"></i> Define First Goal</button>
+                            </div>
                         </div>
                     `;
                 }
- 
-                // 3. Tasks
+
+                // 3. Tasks (Dashboard Grid Card)
                 const tasksList = document.getElementById('tasks-list');
                 tasksList.innerHTML = '';
                 if (data.tasks && data.tasks.length > 0) {
-                    data.tasks.forEach(task => {
+                    data.tasks.slice(0, 4).forEach(task => {
                         const isCompleted = task.status === 'completed';
                         const item = document.createElement('div');
                         item.className = `dashboard-item task-item ${isCompleted ? 'completed' : ''}`;
                         item.innerHTML = `
                             <div class="task-checkbox" onclick="toggleTask(${task.id})">
-                                <i class="fa-regular ${isCompleted ? 'fa-circle-check' : 'fa-circle'}"></i>
+                                <i data-lucide="${isCompleted ? 'check-square' : 'square'}"></i>
                             </div>
                             <div class="item-main">
                                 <span class="item-title">${escapeHTML(task.title)}</span>
@@ -452,19 +672,74 @@
                 } else {
                     tasksList.innerHTML = `
                         <div class="empty-state">
-                            <i class="fa-solid fa-list-check empty-state-icon"></i>
+                            <i data-lucide="list-todo" class="empty-state-icon"></i>
                             <div class="empty-state-title">Actionable Steps</div>
                             <div class="empty-state-text">Your daily schedule and checklist. Complete tasks to level up and unlock reflections.</div>
-                            <button class="empty-state-btn" onclick="prefillQuery('Plan daily tasks for my goals')"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate Tasks</button>
+                            <button class="empty-state-btn" onclick="prefillQuery('Plan daily tasks for my goals')"><i data-lucide="sparkles"></i> Generate Tasks</button>
                         </div>
                     `;
                 }
- 
-                // 4. Milestones
+
+                // 3b. Tasks Page Render (Grid cards list)
+                const tasksPageList = document.getElementById('tasks-page-list');
+                tasksPageList.innerHTML = '';
+                if (data.tasks && data.tasks.length > 0) {
+                    data.tasks.forEach(task => {
+                        const isCompleted = task.status === 'completed';
+                        const card = document.createElement('div');
+                        card.className = `task-card ${isCompleted ? 'completed' : ''}`;
+                        card.innerHTML = `
+                            <div class="task-card-header">
+                                <div class="task-checkbox" onclick="toggleTask(${task.id})">
+                                    <i data-lucide="${isCompleted ? 'check-square' : 'square'}" style="width:20px;height:20px;"></i>
+                                </div>
+                                <div>
+                                    <div class="task-card-title">${escapeHTML(task.title)}</div>
+                                    <div class="task-card-desc" style="margin-top:4px;">${escapeHTML(task.description || 'No additional details.')}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="task-details-row">
+                                <div class="task-detail-item">
+                                    <i data-lucide="tag" style="width:12px;height:12px;"></i>
+                                    <span>Priority: <span class="priority-tag priority-${task.priority}" style="padding:1px 4px; font-size:10px;">${task.priority}</span></span>
+                                </div>
+                                <div class="task-detail-item">
+                                    <i data-lucide="hourglass" style="width:12px;height:12px;"></i>
+                                    <span>Duration: 45 mins</span>
+                                </div>
+                            </div>
+
+                            <div class="task-reasoning-box">
+                                <span class="task-reasoning-title"><i data-lucide="info" style="width:12px;height:12px;"></i> AI Reasoning</span>
+                                <span style="color:var(--text-secondary); line-height:1.4;">Scheduled to build milestone traction. Completion helps lock reflection blocks.</span>
+                            </div>
+
+                            <div class="task-card-actions">
+                                <button class="btn btn-secondary" onclick="prefillQuery('Break down task: ${escapeHTML(task.title)}')"><i data-lucide="git-branch"></i> Decompose</button>
+                                <button class="btn btn-primary" onclick="showToast('Focused block initiated!', 'info')"><i data-lucide="play"></i> Focus</button>
+                            </div>
+                        `;
+                        tasksPageList.appendChild(card);
+                    });
+                } else {
+                    tasksPageList.innerHTML = `
+                        <div class="card" style="padding: 40px; text-align: center; width:100%;">
+                            <div class="empty-state">
+                                <i data-lucide="list-todo" class="empty-state-icon" style="font-size:42px;"></i>
+                                <div class="empty-state-title">No tasks available</div>
+                                <div class="empty-state-text">Your structured daily plans will render here. Generate tasks to proceed.</div>
+                                <button class="btn btn-primary" onclick="prefillQuery('Plan daily tasks for my goals')"><i data-lucide="sparkles"></i> Generate Tasks</button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // 4. Milestones (Dashboard Card)
                 const milestonesList = document.getElementById('milestones-list');
                 milestonesList.innerHTML = '';
                 if (data.milestones && data.milestones.length > 0) {
-                    data.milestones.forEach(m => {
+                    data.milestones.slice(0, 4).forEach(m => {
                         const item = document.createElement('div');
                         item.className = 'dashboard-item';
                         item.innerHTML = `
@@ -479,19 +754,51 @@
                 } else {
                     milestonesList.innerHTML = `
                         <div class="empty-state">
-                            <i class="fa-solid fa-flag-checkered empty-state-icon"></i>
+                            <i data-lucide="flag" class="empty-state-icon"></i>
                             <div class="empty-state-title">Upcoming Milestones</div>
                             <div class="empty-state-text">AI-generated milestones mapping out your roadmap. Let NovaOS design a plan for you.</div>
-                            <button class="empty-state-btn" onclick="prefillQuery('Decompose my active goals into milestones')"><i class="fa-solid fa-map"></i> Generate Milestones</button>
+                            <button class="empty-state-btn" onclick="prefillQuery('Decompose my active goals into milestones')"><i data-lucide="map"></i> Generate Milestones</button>
                         </div>
                     `;
                 }
- 
-                // 5. Reflections
+
+                // 4b. Milestones Page rendering
+                const milestonesPageList = document.getElementById('milestones-page-list');
+                milestonesPageList.innerHTML = '';
+                if (data.milestones && data.milestones.length > 0) {
+                    data.milestones.forEach(m => {
+                        const card = document.createElement('div');
+                        card.className = 'task-card';
+                        card.innerHTML = `
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                                <div class="task-card-title">${escapeHTML(m.title)}</div>
+                                <span class="badge badge-${m.status}">${m.status}</span>
+                            </div>
+                            <p style="font-size:13.5px; color:var(--text-secondary); margin-top:6px;">${escapeHTML(m.description || 'Upcoming milestone target.')}</p>
+                            <div style="font-size:12.5px; color:var(--text-muted); display:flex; align-items:center; gap:6px; margin-top:12px; padding-top:12px; border-top:1px solid var(--border-color);">
+                                <i data-lucide="calendar" style="width:13px;height:13px;"></i> Due: ${m.due_date || 'Flexible target'}
+                            </div>
+                        `;
+                        milestonesPageList.appendChild(card);
+                    });
+                } else {
+                    milestonesPageList.innerHTML = `
+                        <div class="card" style="padding: 40px; text-align: center; width: 100%;">
+                            <div class="empty-state">
+                                <i data-lucide="flag" class="empty-state-icon" style="font-size:42px;"></i>
+                                <div class="empty-state-title">No milestones active</div>
+                                <div class="empty-state-text">Milestones represent long term checkpoints. Generate milestones to structure your roadmap.</div>
+                                <button class="btn btn-primary" onclick="prefillQuery('Decompose my active goals into milestones')"><i data-lucide="map"></i> Generate Milestones</button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // 5. Reflections (Dashboard List Card)
                 const reflectionsList = document.getElementById('reflections-list');
                 reflectionsList.innerHTML = '';
                 if (data.reflections && data.reflections.length > 0) {
-                    data.reflections.forEach(ref => {
+                    data.reflections.slice(0, 3).forEach(ref => {
                         const item = document.createElement('div');
                         item.className = 'dashboard-item';
                         item.innerHTML = `
@@ -506,20 +813,111 @@
                 } else {
                     reflectionsList.innerHTML = `
                         <div class="empty-state">
-                            <i class="fa-solid fa-brain empty-state-icon"></i>
+                            <i data-lucide="brain" class="empty-state-icon"></i>
                             <div class="empty-state-title">Weekly Reflection</div>
                             <div class="empty-state-text">Review patterns, completion rates, and get recommendations to optimize your scheduling.</div>
-                            <button class="empty-state-btn" onclick="prefillQuery('Analyze my progress and log reflections')"><i class="fa-solid fa-clipboard-question"></i> Start Reflection</button>
+                            <button class="empty-state-btn" onclick="prefillQuery('Analyze my progress and log reflections')"><i data-lucide="clipboard-list"></i> Start Reflection</button>
                         </div>
                     `;
                 }
- 
-                // Update badge counts
-                document.getElementById('goals-count').innerText = data.goals ? data.goals.length : 0;
-                document.getElementById('tasks-count').innerText = data.tasks ? data.tasks.length : 0;
-                document.getElementById('milestones-count').innerText = data.milestones ? data.milestones.length : 0;
-                document.getElementById('reflections-count').innerText = data.reflections ? data.reflections.length : 0;
- 
+
+                // 5b. Reflections Page rendering
+                const reflectionsPageList = document.getElementById('reflections-page-list');
+                reflectionsPageList.innerHTML = '';
+                if (data.reflections && data.reflections.length > 0) {
+                    data.reflections.forEach(ref => {
+                        const card = document.createElement('div');
+                        card.className = 'reflection-card';
+                        card.innerHTML = `
+                            <div class="ref-date-row">
+                                <span class="ref-date">${ref.date}</span>
+                                <span class="ref-mood"><i data-lucide="smile"></i> Focused</span>
+                            </div>
+                            
+                            <div class="ref-stat-row">
+                                <div class="ref-stat-box">
+                                    <span class="ref-stat-label">Tasks Completed</span>
+                                    <span class="ref-stat-value" style="color:var(--accent-green);">${ref.completed_count}</span>
+                                </div>
+                                <div class="ref-stat-box">
+                                    <span class="ref-stat-label">Tasks Missed</span>
+                                    <span class="ref-stat-value" style="color:var(--accent-red);">${ref.missed_count}</span>
+                                </div>
+                            </div>
+
+                            <div class="ref-content-block">
+                                <span class="ref-content-label">Lessons Learned / Feedback</span>
+                                <span class="ref-content-text">${escapeHTML(ref.feedback || 'No comments registered.')}</span>
+                            </div>
+
+                            <div class="ref-content-block" style="border-top:1px solid var(--border-color); padding-top:14px;">
+                                <span class="ref-content-label" style="color:var(--accent-orange);"><i data-lucide="lightbulb" style="width:12px;height:12px;margin-top:2px;"></i> AI Insights & Suggestions</span>
+                                <span class="ref-content-text">${escapeHTML(ref.patterns_identified || 'NovaOS is compiling behavior trends.')}</span>
+                            </div>
+                        `;
+                        reflectionsPageList.appendChild(card);
+                    });
+                } else {
+                    reflectionsPageList.innerHTML = `
+                        <div class="card" style="padding: 40px; text-align: center; width: 100%;">
+                            <div class="empty-state">
+                                <i data-lucide="brain" class="empty-state-icon" style="font-size:42px;"></i>
+                                <div class="empty-state-title">No reflections logged</div>
+                                <div class="empty-state-text">Weekly reflections provide optimization analyses. Prompt reflection review to register metrics.</div>
+                                <button class="btn btn-primary" onclick="prefillQuery('Analyze my progress and log reflections')"><i data-lucide="clipboard-list"></i> Start Reflection</button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // 6. Planner View rendering (Hourly Slots)
+                const plannerGrid = document.getElementById('planner-timeline-grid');
+                if (plannerGrid) {
+                    plannerGrid.innerHTML = `
+                        <div class="timeline-hour-col">
+                            <div class="timeline-hour-slot">09:00 AM</div>
+                            <div class="timeline-hour-slot">11:00 AM</div>
+                            <div class="timeline-hour-slot">01:00 PM</div>
+                            <div class="timeline-hour-slot">03:00 PM</div>
+                            <div class="timeline-hour-slot">05:00 PM</div>
+                        </div>
+                        <div class="timeline-content-col" id="timeline-slots-container">
+                            <!-- Injected dynamically below -->
+                        </div>
+                    `;
+                    const container = document.getElementById('timeline-slots-container');
+                    const slots = ['09:00 AM', '11:00 AM', '01:00 PM', '03:00 PM', '05:00 PM'];
+                    
+                    slots.forEach((slot, idx) => {
+                        const div = document.createElement('div');
+                        div.className = 'timeline-content-slot';
+                        
+                        // Check if a task maps to this hour block
+                        const task = data.tasks && data.tasks[idx];
+                        if (task && task.status !== 'completed') {
+                            div.innerHTML = `
+                                <div class="planner-task-block">
+                                    <div class="planner-task-info">
+                                        <span class="planner-task-title">${escapeHTML(task.title)}</span>
+                                        <span class="planner-task-meta"><i data-lucide="sparkles" style="width:10px;height:10px;display:inline-block;vertical-align:middle;margin-right:2px;"></i> AI Scheduled block • 45 mins</span>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="toggleTask(${task.id})" style="padding:6px 12px; font-size:11px;"><i data-lucide="check"></i> Done</button>
+                                </div>
+                            `;
+                        } else {
+                            div.innerHTML = `
+                                <div class="planner-open-slot" onclick="prefillQuery('Plan a task for me at ${slot}')">
+                                    <i data-lucide="plus" style="width:14px;height:14px;margin-right:4px;"></i> Open Slot - Click to Schedule
+                                </div>
+                            `;
+                        }
+                        container.appendChild(div);
+                    });
+                }
+                
+                // Rerender icons
+                lucide.createIcons();
+
             } catch (err) {
                 console.error("Failed to fetch dashboard data:", err);
             }
@@ -580,11 +978,12 @@
             const msg = document.createElement('div');
             msg.className = `chat-message ${sender}`;
             msg.innerHTML = `
-                <div class="msg-avatar"><i class="fa-solid ${sender === 'user' ? 'fa-user' : 'fa-robot'}"></i></div>
+                <div class="msg-avatar"><i data-lucide="${sender === 'user' ? 'user' : 'bot'}"></i></div>
                 <div class="msg-text">${escapeHTML(text).replace(/\n/g, '<br>')}</div>
             `;
             output.appendChild(msg);
             output.scrollTop = output.scrollHeight;
+            lucide.createIcons();
             return msg;
         }
 
@@ -610,39 +1009,41 @@
                 }
             });
 
-            // Toggle visibility of grid components
-            const goalsCard = document.querySelector('.goals-card');
-            const tasksCard = document.querySelector('.tasks-card');
-            const milestonesCard = document.querySelector('.milestones-card');
-            const reflectionsCard = document.querySelector('.reflections-card');
+            // Toggle viewports visibility
+            const panels = document.querySelectorAll('.viewport-panel');
+            panels.forEach(p => p.classList.remove('active'));
 
-            if (tabId === 'dashboard') {
-                goalsCard.style.display = 'block';
-                tasksCard.style.display = 'block';
-                milestonesCard.style.display = 'block';
-                reflectionsCard.style.display = 'block';
-            } else if (tabId === 'goals') {
-                goalsCard.style.display = 'block';
-                tasksCard.style.display = 'none';
-                milestonesCard.style.display = 'block';
-                reflectionsCard.style.display = 'none';
-            } else if (tabId === 'tasks') {
-                goalsCard.style.display = 'none';
-                tasksCard.style.display = 'block';
-                milestonesCard.style.display = 'none';
-                reflectionsCard.style.display = 'none';
-            } else if (tabId === 'reflections') {
-                goalsCard.style.display = 'none';
-                tasksCard.style.display = 'none';
-                milestonesCard.style.display = 'none';
-                reflectionsCard.style.display = 'block';
+            const targetView = document.getElementById(`view-${tabId}`);
+            if (targetView) targetView.classList.add('active');
+
+            // Header titles update
+            const titleEl = document.getElementById('page-title');
+            const subtitleEl = document.getElementById('page-subtitle');
+            
+            const titlesMap = {
+                'dashboard': ['Dashboard', 'Welcome back, Explorer. Secure AI operations verified.'],
+                'goals': ['Goals & Plans', 'Establish, refine, and monitor your long-term objectives.'],
+                'planner': ['Operational Planner', 'Hourly alignment timeline blocks mapping AI priorities.'],
+                'tasks': ['Daily Tasks', 'Actionable checklists and detail cards structured by priority.'],
+                'milestones': ['Upcoming Milestones', 'Checkpoints generated by LLM analysis loops.'],
+                'reflections': ['Progress Reflections', 'Detected behavior habits and suggested planning pivots.'],
+                'insights': ['Performance Insights', 'Visual productivity metrics and strategy analytics.'],
+                'settings': ['System Settings', 'NovaOS core network status and LLM parameters.']
+            };
+
+            if (titlesMap[tabId]) {
+                titleEl.innerText = titlesMap[tabId][0];
+                subtitleEl.innerText = titlesMap[tabId][1];
             }
+            
+            lucide.createIcons();
         }
 
         function openGoalModal() {
             const modal = document.getElementById('goal-modal');
             modal.style.display = 'block';
             setTimeout(() => modal.classList.add('active'), 10);
+            lucide.createIcons();
         }
         function closeGoalModal() {
             const modal = document.getElementById('goal-modal');
@@ -656,21 +1057,23 @@
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
             
-            let icon = 'fa-circle-info';
-            if (type === 'success') icon = 'fa-circle-check';
-            if (type === 'error') icon = 'fa-circle-exclamation';
+            let icon = 'info';
+            if (type === 'success') icon = 'check-circle';
+            if (type === 'error') icon = 'alert-triangle';
             
             toast.innerHTML = `
-                <i class="fa-solid ${icon}"></i>
+                <i data-lucide="${icon}"></i>
                 <span>${escapeHTML(message)}</span>
             `;
             container.appendChild(toast);
+            lucide.createIcons();
             
             setTimeout(() => {
                 toast.classList.add('toast-fadeout');
                 toast.addEventListener('transitionend', () => toast.remove());
             }, 3000);
         }
+        
         async function submitGoal() {
             const title = document.getElementById('goal-title').value.trim();
             const desc = document.getElementById('goal-desc').value.trim();
@@ -707,6 +1110,7 @@
         }
 
         // Init
+        lucide.createIcons();
         fetchDashboard();
         setInterval(fetchDashboard, 10000); // refresh every 10s
     </script>
