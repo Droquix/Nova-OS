@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaOS — AI Personal Operating System</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="glow-container">
+        <div class="glow-sphere sphere-1"></div>
+        <div class="glow-sphere sphere-2"></div>
+    </div>
+
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <i class="fa-solid fa-circle-nodes brand-icon"></i>
+                <span class="brand-name">NovaOS</span>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" onclick="switchTab('dashboard')">
+                    <i class="fa-solid fa-chart-simple"></i> Dashboard
+                </a>
+                <a href="#" class="nav-item" onclick="switchTab('goals')">
+                    <i class="fa-solid fa-bullseye"></i> Goals & Plans
+                </a>
+                <a href="#" class="nav-item" onclick="switchTab('tasks')">
+                    <i class="fa-solid fa-list-check"></i> Tasks
+                </a>
+                <a href="#" class="nav-item" onclick="switchTab('reflections')">
+                    <i class="fa-solid fa-brain"></i> Reflections
+                </a>
+            </nav>
+
+            <div class="user-profile-widget">
+                <div class="profile-pic">
+                    <i class="fa-solid fa-user-astronaut"></i>
+                </div>
+                <div class="profile-info">
+                    <div class="profile-name">Explorer</div>
+                    <div class="profile-status">Level 1 Pathfinder</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="header-search">
+                    <h1>NovaOS Dashboard</h1>
+                    <p class="subtitle">Secure AI Personal Operating System</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="openGoalModal()">
+                        <i class="fa-solid fa-plus"></i> New Goal
+                    </button>
+                </div>
+            </header>
+
+            <!-- Recommendation Panel -->
+            <section class="rec-panel">
+                <div class="card glass rec-card">
+                    <div class="rec-icon">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </div>
+                    <div class="rec-body">
+                        <h3>Today's AI Recommendation</h3>
+                        <p id="ai-rec-text">Initialize a goal to receive personalized daily recommendations.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Grid Layout -->
+            <div class="dashboard-grid">
+                <!-- Goals -->
+                <div class="card glass grid-item goals-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-bullseye card-icon icon-goal"></i> Current Goals</h2>
+                    </div>
+                    <div class="card-body scrollable" id="goals-list">
+                        <!-- Goals dynamic insertion -->
+                    </div>
+                </div>
+
+                <!-- Today's Tasks -->
+                <div class="card glass grid-item tasks-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-list-check card-icon icon-task"></i> Today's Tasks</h2>
+                    </div>
+                    <div class="card-body scrollable" id="tasks-list">
+                        <!-- Tasks dynamic insertion -->
+                    </div>
+                </div>
+
+                <!-- Milestones -->
+                <div class="card glass grid-item milestones-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-flag-checkered card-icon icon-milestone"></i> Upcoming Milestones</h2>
+                    </div>
+                    <div class="card-body scrollable" id="milestones-list">
+                        <!-- Milestones dynamic insertion -->
+                    </div>
+                </div>
+
+                <!-- Reflections -->
+                <div class="card glass grid-item reflections-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-brain card-icon icon-reflection"></i> Recent Reflections</h2>
+                    </div>
+                    <div class="card-body scrollable" id="reflections-list">
+                        <!-- Reflections dynamic insertion -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat / Query Interface -->
+            <section class="chat-section glass">
+                <div class="chat-header">
+                    <h3><i class="fa-solid fa-terminal"></i> Command NovaOS</h3>
+                    <span class="security-badge"><i class="fa-solid fa-shield-halved"></i> Security Protected</span>
+                </div>
+                <div class="chat-output" id="chat-output">
+                    <div class="chat-message system">
+                        <div class="msg-avatar"><i class="fa-solid fa-robot"></i></div>
+                        <div class="msg-text">Welcome to NovaOS. Ask me to create a goal, plan milestones, prioritize tasks, or log your reflections.</div>
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="query-input" placeholder="Type a command (e.g., 'Plan a goal to run 5k in 2 months' or 'Log reflection for today')..." onkeydown="if(event.key === 'Enter') sendQuery()">
+                    <button class="send-btn" onclick="sendQuery()"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal for new goal -->
+    <div id="goal-modal" class="modal">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h2>Create New Goal</h2>
+                <span class="close-btn" onclick="closeGoalModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="goal-title">Goal Title</label>
+                    <input type="text" id="goal-title" placeholder="e.g. Learn French, Study ML">
+                </div>
+                <div class="form-group">
+                    <label for="goal-desc">Description</label>
+                    <textarea id="goal-desc" placeholder="Details or notes about this goal..."></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="submitGoal()">Create Goal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Logic -->
+    <script>
+        async function fetchDashboard() {
+            try {
+                const response = await fetch('/api/dashboard');
+                const data = await response.json();
+                
+                // 1. Recommendation
+                const recText = document.getElementById('ai-rec-text');
+                if (data.recommendations && data.recommendations.text) {
+                    recText.innerText = data.recommendations.text;
+                } else {
+                    recText.innerText = "Initialize a goal or ask NovaOS to plan a task to get personalized recommendations.";
+                }
+
+                // 2. Goals
+                const goalsList = document.getElementById('goals-list');
+                goalsList.innerHTML = '';
+                if (data.goals && data.goals.length > 0) {
+                    data.goals.forEach(goal => {
+                        const item = document.createElement('div');
+                        item.className = 'dashboard-item';
+                        item.innerHTML = `
+                            <div class="item-main">
+                                <span class="item-title">${escapeHTML(goal.title)}</span>
+                                <span class="item-desc">${escapeHTML(goal.description || '')}</span>
+                            </div>
+                            <span class="badge badge-${goal.status}">${goal.status}</span>
+                        `;
+                        goalsList.appendChild(item);
+                    });
+                } else {
+                    goalsList.innerHTML = '<div class="empty-state">No goals created yet. Use the command box below to formulate one!</div>';
+                }
+
+                // 3. Tasks
+                const tasksList = document.getElementById('tasks-list');
+                tasksList.innerHTML = '';
+                if (data.tasks && data.tasks.length > 0) {
+                    data.tasks.forEach(task => {
+                        const isCompleted = task.status === 'completed';
+                        const item = document.createElement('div');
+                        item.className = `dashboard-item task-item ${isCompleted ? 'completed' : ''}`;
+                        item.innerHTML = `
+                            <div class="task-checkbox" onclick="toggleTask(${task.id})">
+                                <i class="fa-regular ${isCompleted ? 'fa-circle-check' : 'fa-circle'}"></i>
+                            </div>
+                            <div class="item-main">
+                                <span class="item-title">${escapeHTML(task.title)}</span>
+                                <span class="item-desc">${escapeHTML(task.description || '')}</span>
+                            </div>
+                            <span class="priority-tag priority-${task.priority}">${task.priority}</span>
+                        `;
+                        tasksList.appendChild(item);
+                    });
+                } else {
+                    tasksList.innerHTML = '<div class="empty-state">No tasks due today. You are fully caught up!</div>';
+                }
+
+                // 4. Milestones
+                const milestonesList = document.getElementById('milestones-list');
+                milestonesList.innerHTML = '';
+                if (data.milestones && data.milestones.length > 0) {
+                    data.milestones.forEach(m => {
+                        const item = document.createElement('div');
+                        item.className = 'dashboard-item';
+                        item.innerHTML = `
+                            <div class="item-main">
+                                <span class="item-title">${escapeHTML(m.title)}</span>
+                                <span class="item-desc">Due: ${m.due_date || 'N/A'}</span>
+                            </div>
+                            <span class="badge badge-${m.status}">${m.status}</span>
+                        `;
+                        milestonesList.appendChild(item);
+                    });
+                } else {
+                    milestonesList.innerHTML = '<div class="empty-state">No upcoming milestones defined.</div>';
+                }
+
+                // 5. Reflections
+                const reflectionsList = document.getElementById('reflections-list');
+                reflectionsList.innerHTML = '';
+                if (data.reflections && data.reflections.length > 0) {
+                    data.reflections.forEach(ref => {
+                        const item = document.createElement('div');
+                        item.className = 'dashboard-item';
+                        item.innerHTML = `
+                            <div class="item-main">
+                                <span class="item-title">${ref.date}</span>
+                                <span class="item-desc">Completed: ${ref.completed_count} | Missed: ${ref.missed_count}</span>
+                                <span class="item-desc">Feedback: ${escapeHTML(ref.feedback || '')}</span>
+                            </div>
+                        `;
+                        reflectionsList.appendChild(item);
+                    });
+                } else {
+                    reflectionsList.innerHTML = '<div class="empty-state">No reflections logged. Try logging one in the command box.</div>';
+                }
+
+            } catch (err) {
+                console.error("Failed to fetch dashboard data:", err);
+            }
+        }
+
+        async function toggleTask(taskId) {
+            try {
+                const res = await fetch('/api/complete_task', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ task_id: taskId })
+                });
+                if (res.ok) {
+                    fetchDashboard();
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function sendQuery() {
+            const input = document.getElementById('query-input');
+            const query = input.value.trim();
+            if (!query) return;
+
+            input.value = '';
+            appendMessage('user', query);
+
+            const loader = appendMessage('system', 'NovaOS processing request...');
+            
+            try {
+                const res = await fetch('/api/query', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: query })
+                });
+                const data = await res.json();
+                
+                loader.remove();
+                appendMessage('system', data.response);
+                fetchDashboard();
+            } catch (err) {
+                loader.remove();
+                appendMessage('system', 'Error: Failed to process query.');
+                console.error(err);
+            }
+        }
+
+        function appendMessage(sender, text) {
+            const output = document.getElementById('chat-output');
+            const msg = document.createElement('div');
+            msg.className = `chat-message ${sender}`;
+            msg.innerHTML = `
+                <div class="msg-avatar"><i class="fa-solid ${sender === 'user' ? 'fa-user' : 'fa-robot'}"></i></div>
+                <div class="msg-text">${escapeHTML(text).replace(/\n/g, '<br>')}</div>
+            `;
+            output.appendChild(msg);
+            output.scrollTop = output.scrollHeight;
+            return msg;
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag] || tag)
+            );
+        }
+
+        function switchTab(tabId) {
+            // Update active nav class
+            const navItems = document.querySelectorAll('.nav-menu .nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('onclick') && item.getAttribute('onclick').includes(tabId)) {
+                    item.classList.add('active');
+                }
+            });
+
+            // Toggle visibility of grid components
+            const goalsCard = document.querySelector('.goals-card');
+            const tasksCard = document.querySelector('.tasks-card');
+            const milestonesCard = document.querySelector('.milestones-card');
+            const reflectionsCard = document.querySelector('.reflections-card');
+
+            if (tabId === 'dashboard') {
+                goalsCard.style.display = 'block';
+                tasksCard.style.display = 'block';
+                milestonesCard.style.display = 'block';
+                reflectionsCard.style.display = 'block';
+            } else if (tabId === 'goals') {
+                goalsCard.style.display = 'block';
+                tasksCard.style.display = 'none';
+                milestonesCard.style.display = 'block';
+                reflectionsCard.style.display = 'none';
+            } else if (tabId === 'tasks') {
+                goalsCard.style.display = 'none';
+                tasksCard.style.display = 'block';
+                milestonesCard.style.display = 'none';
+                reflectionsCard.style.display = 'none';
+            } else if (tabId === 'reflections') {
+                goalsCard.style.display = 'none';
+                tasksCard.style.display = 'none';
+                milestonesCard.style.display = 'none';
+                reflectionsCard.style.display = 'block';
+            }
+        }
+
+        function openGoalModal() {
+            document.getElementById('goal-modal').style.display = 'block';
+        }
+        function closeGoalModal() {
+            document.getElementById('goal-modal').style.display = 'none';
+        }
+        async function submitGoal() {
+            const title = document.getElementById('goal-title').value.trim();
+            const desc = document.getElementById('goal-desc').value.trim();
+            if (!title) return;
+
+            closeGoalModal();
+            const query = `Create a new goal titled "${title}" with description "${desc}".`;
+            appendMessage('user', query);
+            const loader = appendMessage('system', 'Creating goal...');
+            
+            try {
+                const res = await fetch('/api/query', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: query })
+                });
+                const data = await res.json();
+                loader.remove();
+                appendMessage('system', data.response);
+                
+                document.getElementById('goal-title').value = '';
+                document.getElementById('goal-desc').value = '';
+                fetchDashboard();
+            } catch(e) {
+                loader.remove();
+                appendMessage('system', 'Failed to create goal.');
+                console.error(e);
+            }
+        }
+
+        // Init
+        fetchDashboard();
+        setInterval(fetchDashboard, 10000); // refresh every 10s
+    </script>
+</body>
+</html>
