@@ -1,6 +1,7 @@
 # NovaOS — AI Personal Operating System
 
 **Live Hosted Dashboard:** [https://nova-os-4ugp.onrender.com/static/index.html?t=12345](https://nova-os-4ugp.onrender.com/static/index.html?t=12345)
+**Live Hosted Dev UI / Playground:** [https://nova-os-4ugp.onrender.com/dev-ui/](https://nova-os-4ugp.onrender.com/dev-ui/)
 
 A secure, goal-oriented AI Personal Operating System built using the Google ADK (2.0 Workflow graph API) and a multi-agent architecture. NovaOS helps users achieve long-term goals by breaking them down into tasks, milestones, and reflections, maintaining state in a shared SQLite database.
 

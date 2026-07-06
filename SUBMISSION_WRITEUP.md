@@ -2,6 +2,7 @@
 ### Kaggle 5-Day AI Agents Capstone Submission Write-up
 
 **Live Hosted Dashboard:** [https://nova-os-4ugp.onrender.com/static/index.html?t=12345](https://nova-os-4ugp.onrender.com/static/index.html?t=12345)
+**Live Hosted Dev UI / Playground:** [https://nova-os-4ugp.onrender.com/dev-ui/](https://nova-os-4ugp.onrender.com/dev-ui/)
 
 ---
 
