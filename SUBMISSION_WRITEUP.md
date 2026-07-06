@@ -1,6 +1,8 @@
 # NovaOS — AI Personal Operating System
 ### Kaggle 5-Day AI Agents Capstone Submission Write-up
 
+**Live Hosted Dashboard:** [https://nova-os-4ugp.onrender.com/static/index.html?t=12345](https://nova-os-4ugp.onrender.com/static/index.html?t=12345)
+
 ---
 
 ## 1. Problem Statement
