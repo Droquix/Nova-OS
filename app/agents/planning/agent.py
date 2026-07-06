@@ -20,7 +20,7 @@ mcp_toolset = McpToolset(
             args=["run", "python", "-m", "app.mcp_server"],
         ),
     ),
-    tool_filter=["save_goal", "get_goal", "update_goal", "create_task", "complete_task", "get_today_tasks"]
+    tool_filter=["save_goal", "get_goal", "update_goal", "create_task", "complete_task", "get_today_tasks", "create_milestone", "save_memory"]
 )
 
 planning_agent = LlmAgent(

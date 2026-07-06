@@ -90,6 +90,8 @@ def save_goal(title: str, description: str = "", status: str = "in_progress"):
     )
     goal_id = cursor.lastrowid
     conn.commit()
+    print("Goal created", flush=True)
+    print("Database committed", flush=True)
     conn.close()
     return goal_id
 
@@ -142,6 +144,8 @@ def create_milestone(goal_id: int, title: str, description: str = "", due_date: 
     )
     milestone_id = cursor.lastrowid
     conn.commit()
+    print("Milestones created", flush=True)
+    print("Database committed", flush=True)
     conn.close()
     return milestone_id
 
@@ -165,6 +169,8 @@ def create_task(goal_id: int, title: str, description: str = "", priority: str =
     )
     task_id = cursor.lastrowid
     conn.commit()
+    print("Tasks created", flush=True)
+    print("Database committed", flush=True)
     conn.close()
     return task_id
 
@@ -216,6 +222,8 @@ def save_memory(key: str, value: dict):
         VALUES (?, ?)
     """, (key, json.dumps(value)))
     conn.commit()
+    print("Memory updated", flush=True)
+    print("Database committed", flush=True)
     conn.close()
 
 def get_memory(key: str):

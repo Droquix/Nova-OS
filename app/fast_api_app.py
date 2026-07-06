@@ -105,6 +105,7 @@ def get_dashboard_root():
 
 @app.get("/api/dashboard")
 def get_dashboard_data():
+    print("Dashboard refreshed", flush=True)
     from app.db import get_goals, get_tasks, get_reflections, get_memory, get_milestones
     return {
         "goals": get_goals(),

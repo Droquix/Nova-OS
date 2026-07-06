@@ -14,6 +14,7 @@ from app.db import (
     get_memory as db_get_memory,
     save_reflection as db_save_reflection,
     get_reflections as db_get_reflections,
+    create_milestone as db_create_milestone,
     DB_PATH
 )
 
@@ -55,6 +56,19 @@ def update_goal(goal_id: int, title: str = None, description: str = None, status
     """
     db_update_goal(goal_id, title, description, status)
     return json.dumps({"status": "success"})
+
+@mcp.tool()
+def create_milestone(goal_id: int, title: str, description: str = "", due_date: str = None) -> str:
+    """Create a milestone checkpoint associated with a goal.
+    
+    Args:
+        goal_id: The ID of the goal this milestone supports.
+        title: The milestone title.
+        description: Milestone description.
+        due_date: The due date in ISO or YYYY-MM-DD format.
+    """
+    milestone_id = db_create_milestone(goal_id, title, description, due_date)
+    return json.dumps({"status": "success", "milestone_id": milestone_id})
 
 # 2. Task Tools
 @mcp.tool()
