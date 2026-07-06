@@ -89,9 +89,9 @@
                     <div class="card overview-card">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                             <h2 style="font-family: var(--font-header); font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
-                                <i data-lucide="presentation" style="color: var(--accent-orange);"></i> Goal Progress Overview
+                                <i data-lucide="presentation" style="color: var(--accent-primary);"></i> Goal Progress Overview
                             </h2>
-                            <span id="streak-badge" class="badge" style="background-color: var(--accent-orange-light); color: var(--accent-orange); display: inline-flex; align-items: center; gap: 4px; text-transform: none;">
+                            <span id="streak-badge" class="badge" style="background-color: var(--accent-primary-light); color: var(--accent-primary); display: inline-flex; align-items: center; gap: 4px; text-transform: none;">
                                 <i data-lucide="flame"></i> <span id="streak-count">0</span> Day Streak
                             </span>
                         </div>
@@ -100,7 +100,7 @@
                         <div class="progress-container" style="margin-bottom: 24px;">
                             <div class="progress-header">
                                 <span style="color: var(--text-secondary);">Overall Task Completion</span>
-                                <span id="completion-percentage" style="color: var(--accent-orange);">0%</span>
+                                <span id="completion-percentage" style="color: var(--accent-primary);">0%</span>
                             </div>
                             <div class="progress-bar-bg">
                                 <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%;"></div>
@@ -111,7 +111,7 @@
                         <div class="summary-grid">
                             <div class="summary-card">
                                 <span class="summary-card-title">Active Goals</span>
-                                <span class="summary-card-value" id="active-goals-count" style="color: var(--accent-orange);">0</span>
+                                <span class="summary-card-value" id="active-goals-count" style="color: var(--accent-primary);">0</span>
                             </div>
                             <div class="summary-card">
                                 <span class="summary-card-title">Completed Tasks</span>
@@ -135,7 +135,7 @@
                     <!-- Tasks Card -->
                     <div class="card grid-item tasks-card">
                         <div class="card-header">
-                            <h2><i data-lucide="check-circle" style="color: var(--accent-orange);"></i> Today's Tasks</h2>
+                            <h2><i data-lucide="check-circle" style="color: var(--accent-primary);"></i> Today's Tasks</h2>
                             <span id="tasks-count" class="badge badge-in_progress">0</span>
                         </div>
                         <div class="card-body scrollable" id="tasks-list">
@@ -171,7 +171,7 @@
                     <!-- AI Insights Panel -->
                     <div class="card grid-item insights-card">
                         <div class="card-header">
-                            <h2><i data-lucide="sparkles" style="color: var(--accent-orange);"></i> AI Productivity Insights</h2>
+                            <h2><i data-lucide="sparkles" style="color: var(--accent-primary);"></i> AI Productivity Insights</h2>
                         </div>
                         <div class="card-body scrollable" id="ai-insights-panel">
                             <div class="empty-state">
@@ -447,7 +447,7 @@
                                 <ul style="list-style-type: none; padding-left: 0; margin-top: 12px; display: flex; flex-direction: column; gap: 6px;">
                                     ${(rec.reasoning || []).map(point => `
                                         <li style="font-size: 13.5px; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 8px; line-height: 1.4;">
-                                            <i data-lucide="check-circle-2" style="color: var(--accent-orange); width: 14px; height: 14px; margin-top: 3px; flex-shrink:0;"></i>
+                                            <i data-lucide="check-circle-2" style="color: var(--accent-primary); width: 14px; height: 14px; margin-top: 3px; flex-shrink:0;"></i>
                                             <span>${escapeHTML(point)}</span>
                                         </li>
                                     `).join('')}
@@ -471,15 +471,15 @@
                                 </div>
                                 <ul style="list-style-type: none; padding-left: 0; margin-top: 12px; display: flex; flex-direction: column; gap: 6px;">
                                     <li style="font-size: 13.5px; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 8px; line-height: 1.4;">
-                                        <i data-lucide="check-circle-2" style="color: var(--accent-orange); width: 14px; height: 14px; margin-top: 3px; flex-shrink:0;"></i>
+                                        <i data-lucide="check-circle-2" style="color: var(--accent-primary); width: 14px; height: 14px; margin-top: 3px; flex-shrink:0;"></i>
                                         <span>Decompose your active goals into milestones.</span>
                                     </li>
                                     <li style="font-size: 13.5px; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 8px; line-height: 1.4;">
-                                        <i data-lucide="check-circle-2" style="color: var(--accent-orange); width: 14px; height: 14px; margin-top: 3px; flex-shrink:0;"></i>
+                                        <i data-lucide="check-circle-2" style="color: var(--accent-primary); width: 14px; height: 14px; margin-top: 3px; flex-shrink:0;"></i>
                                         <span>Plan 2-3 high priority tasks for today to generate momentum.</span>
                                     </li>
                                     <li style="font-size: 13.5px; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 8px; line-height: 1.4;">
-                                        <i data-lucide="check-circle-2" style="color: var(--accent-orange); width: 14px; height: 14px; margin-top: 3px; flex-shrink:0;"></i>
+                                        <i data-lucide="check-circle-2" style="color: var(--accent-primary); width: 14px; height: 14px; margin-top: 3px; flex-shrink:0;"></i>
                                         <span>Complete reflections at end of day to help NovaOS adapt recommendations.</span>
                                     </li>
                                 </ul>
@@ -529,7 +529,7 @@
                             <div class="progress-container">
                                 <div class="progress-header">
                                     <span style="color: var(--text-secondary);">Goal Progress</span>
-                                    <span style="color: var(--accent-orange); font-weight:700;">${goalProgress}%</span>
+                                    <span style="color: var(--accent-primary); font-weight:700;">${goalProgress}%</span>
                                 </div>
                                 <div class="progress-bar-bg">
                                     <div class="progress-bar-fill" style="width: ${goalProgress}%;"></div>
@@ -783,9 +783,9 @@
                             </div>
 
                             <div class="ref-content-block" style="border-top:1px solid var(--border-color); padding-top:14px;">
-                                <span class="ref-content-label" style="color:var(--accent-orange);"><i data-lucide="lightbulb" style="width:12px;height:12px;margin-top:2px;"></i> AI Insights & Suggestions</span>
-                                <span class="ref-content-text">${escapeHTML(ref.patterns_identified || 'NovaOS is compiling behavior trends.')}</span>
-                            </div>
+                                 <span class="ref-content-label" style="color:var(--accent-primary);"><i data-lucide="lightbulb" style="width:12px;height:12px;margin-top:2px;"></i> AI Insights & Suggestions</span>
+                                 <span class="ref-content-text">${escapeHTML(ref.patterns_identified || 'NovaOS is compiling behavior trends.')}</span>
+                             </div>
                         `;
                         reflectionsPageList.appendChild(card);
                     });
