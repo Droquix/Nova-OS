@@ -76,6 +76,68 @@ def init_db():
         )
     """)
     
+    # Seeding section: Only seeds if the goals table is empty
+    cursor.execute("SELECT COUNT(*) FROM goals")
+    if cursor.fetchone()[0] == 0:
+        import datetime
+        now = datetime.datetime.now().isoformat()
+        yesterday = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+        
+        # 1. Insert Goal
+        cursor.execute(
+            "INSERT INTO goals (title, description, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
+            ("Learn Python in 3 months", "Acquire intermediate Python proficiency, build real projects, and learn software engineering best practices.", "in_progress", now, now)
+        )
+        goal_id = cursor.lastrowid
+        
+        # 2. Insert Milestones
+        milestones = [
+            (goal_id, "Month 1: Core Syntax & Scripting Basics", "Basic programming syntax, variables, conditionals, loops, functions.", "completed", (datetime.datetime.now() - datetime.timedelta(days=30)).isoformat()),
+            (goal_id, "Month 2: OOP & Web Applications with FastAPI", "Classes, inheritance, polymorphism, HTTP servers, API route endpoints.", "completed", (datetime.datetime.now() - datetime.timedelta(days=5)).isoformat()),
+            (goal_id, "Month 3: Advanced Concepts & Capstone Project", "Iterators, generators, decorators, clean architecture, and deployment.", "pending", (datetime.datetime.now() + datetime.timedelta(days=30)).isoformat())
+        ]
+        cursor.executemany(
+            "INSERT INTO milestones (goal_id, title, description, status, due_date) VALUES (?, ?, ?, ?, ?)",
+            milestones
+        )
+        
+        # 3. Insert Tasks
+        tasks = [
+            (goal_id, "Study Python basic variables and data structures", "Understand lists, dicts, tuples, sets.", "completed", "high", (datetime.datetime.now() - datetime.timedelta(days=60)).isoformat(), (datetime.datetime.now() - datetime.timedelta(days=60)).isoformat()),
+            (goal_id, "Build a command-line calculator app", "Practice simple function mappings and user input logic.", "completed", "medium", (datetime.datetime.now() - datetime.timedelta(days=45)).isoformat(), (datetime.datetime.now() - datetime.timedelta(days=45)).isoformat()),
+            (goal_id, "Learn Object-Oriented Programming (OOP) principles", "Implement classes, inheritance, method overriding.", "completed", "high", (datetime.datetime.now() - datetime.timedelta(days=15)).isoformat(), (datetime.datetime.now() - datetime.timedelta(days=15)).isoformat()),
+            (goal_id, "Set up local SQLite database connection", "Write schemas, migration scripts, connection helpers.", "completed", "medium", (datetime.datetime.now() - datetime.timedelta(days=3)).isoformat(), (datetime.datetime.now() - datetime.timedelta(days=3)).isoformat()),
+            (goal_id, "Read Python packaging tutorial & configure pyproject.toml", "Define dependencies, author metadata, build specifications.", "pending", "medium", now, None),
+            (goal_id, "Refactor agent.py code and implement clean error handlings", "Fix circular imports, tracebacks, response formats.", "pending", "high", now, None),
+            (goal_id, "Write unit tests for downstream agent workflows using pytest", "Implement mock clients, assertions, fixtures.", "pending", "low", (datetime.datetime.now() + datetime.timedelta(days=2)).isoformat(), None)
+        ]
+        cursor.executemany(
+            "INSERT INTO tasks (goal_id, title, description, status, priority, due_date, completed_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            tasks
+        )
+        
+        # 4. Insert Reflection
+        cursor.execute("""
+            INSERT OR REPLACE INTO reflections (date, completed_count, missed_count, feedback, patterns_identified, suggestions)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (yesterday, 3, 1, "Completed basic database schemas and setup. Struggled slightly with circular dependencies in FastAPI imports.", "Highly productive morning sessions. Late circular import errors block flow in the evening.", "Group import blocks cleanly inside local files. Prioritize architecture layout tasks in the morning."))
+        
+        # 5. Insert AI Recommendation Memory
+        rec_val = {
+            "title": "Resolve coding bugs & optimize imports",
+            "reasoning": [
+                "Based on your reflection yesterday regarding circular dependency issues and importing bugs in FastAPI, it is highly recommended to isolate imports.",
+                "Create local import wrappers inside fast_api_app lifespan for agents.",
+                "Run unit tests using pytest to confirm execution remains error-free."
+            ],
+            "duration": "30 minutes",
+            "priority": "high"
+        }
+        cursor.execute("""
+            INSERT OR REPLACE INTO memories (key, value)
+            VALUES (?, ?)
+        """, ("ai_recommendations", json.dumps(rec_val)))
+        
     conn.commit()
     conn.close()
 

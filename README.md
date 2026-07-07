@@ -77,6 +77,9 @@ graph TD
 ### NovaOS Project Cover Banner
 ![NovaOS Cover Banner](assets/cover_page_banner.png)
 
+### NovaOS Interactive Walkthrough Recording
+![NovaOS Walkthrough Recording](assets/demo_walkthrough.webp)
+
 ---
 
 ## MCP Architecture
